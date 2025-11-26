@@ -3,6 +3,8 @@ package com.art_gallery_hub.model;
 import com.art_gallery_hub.enums.ExhibitionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,19 +36,20 @@ public class Exhibition {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
     // TODO
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "curator_id", referencedColumnName = "id",
-            nullable = false, unique = true)
+    @JoinColumn(name = "curator_id", nullable = false)
     private User curator;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING) // so that JPA retains the name of the style
+    // (for example, "IMPRESSIONISM") as a string, not a number (index)
     private ExhibitionStatus status;
 
     // TODO

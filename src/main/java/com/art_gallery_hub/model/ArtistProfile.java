@@ -22,12 +22,11 @@ public class ArtistProfile {
     private Long id;
 
     // TODO
-//    @Column(nullable = false, unique = true)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @Column(nullable = false, name = "display_name")
+    @Column(name = "display_name", nullable = false)
     private String displayName;
 
     @Column(nullable = false)
