@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -25,14 +26,12 @@ public class Review {
 
     // TODO
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artwork_id", referencedColumnName = "id",
-            nullable = false, unique = true)
+    @JoinColumn(name = "artwork_id", nullable = false)
     private Artwork artwork;
 
     // TODO
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", referencedColumnName = "id",
-            nullable = false, unique = true)
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
     @Column(nullable = false)
@@ -41,6 +40,7 @@ public class Review {
     @Column
     private String comment;
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp // Automatically sets the date at creation
     private LocalDate createdAt;
 }

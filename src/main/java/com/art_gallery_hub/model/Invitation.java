@@ -26,19 +26,17 @@ public class Invitation {
 
     // TODO
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exhibition_id", referencedColumnName = "id",
-            nullable = false, unique = true)
+    @JoinColumn(name = "exhibition_id", nullable = false)
     private Exhibition exhibition;
 
     // TODO
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_profile_id", referencedColumnName = "id",
-            nullable = false, unique = true)
+    @JoinColumn(name = "artist_profile_id", nullable = false)
     private ArtistProfile artist;
 
     @Column(nullable = false)
     private InvitationStatus status;
 
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 }
