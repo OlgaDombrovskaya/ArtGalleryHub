@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="
+                     http://www.liquibase.org/xml/ns/dbchangelog
+                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="1.1.1-create-artworks-table" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="artworks"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="artworks">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_artworks"/>
+            </column>
+            <column name="artist_profile_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="style" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_path" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_public" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="artworks"
+                                 baseColumnNames="artist_profile_id"
+                                 constraintName="fk_artworks_artist_profile"
+                                 referencedTableName="artist_profiles"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropTable tableName="artworks"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1.1.2-create-exhibitions-table" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="exhibitions"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="exhibitions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_exhibitions"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="curator_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="exhibitions"
+                                 baseColumnNames="curator_id"
+                                 constraintName="fk_exhibitions_curator"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropTable tableName="exhibitions"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1.1.3-create-exhibition-artworks-table" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="exhibition_artworks"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="exhibition_artworks">
+            <column name="exhibition_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="artwork_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="exhibition_id, artwork_id"
+                       tableName="exhibition_artworks"
+                       constraintName="pk_exhibition_artworks"/>
+
+        <addForeignKeyConstraint baseTableName="exhibition_artworks"
+                                 baseColumnNames="exhibition_id"
+                                 constraintName="fk_exhibition_artworks_exhibition"
+                                 referencedTableName="exhibitions"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="exhibition_artworks"
+                                 baseColumnNames="artwork_id"
+                                 constraintName="fk_exhibition_artworks_artwork"
+                                 referencedTableName="artworks"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropTable tableName="exhibition_artworks"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1.1.4-create-reviews-table" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="reviews"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="reviews">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_reviews"/>
+            </column>
+            <column name="artwork_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="VARCHAR(255)"/>
+            <column name="created_at" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="reviews"
+                                 baseColumnNames="artwork_id"
+                                 constraintName="fk_reviews_artwork"
+                                 referencedTableName="artworks"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="reviews"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_reviews_author"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropTable tableName="reviews"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1.1.5-create-invitations-table" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="invitations"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="invitations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_invitations"/>
+            </column>
+            <column name="exhibition_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="artist_profile_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="invitations"
+                             columnNames="exhibition_id, artist_profile_id"
+                             constraintName="uk_invitation_exhibition_artist_profile"/>
+
+        <addForeignKeyConstraint baseTableName="invitations"
+                                 baseColumnNames="exhibition_id"
+                                 constraintName="fk_invitations_exhibition"
+                                 referencedTableName="exhibitions"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="invitations"
+                                 baseColumnNames="artist_profile_id"
+                                 constraintName="fk_invitations_artist_profile"
+                                 referencedTableName="artist_profiles"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropTable tableName="invitations"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="
+                     http://www.liquibase.org/xml/ns/dbchangelog
+                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="1.2.1-insert-roles" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="roles"/>
+        </preConditions>
+
+        <insert tableName="roles">
+            <column name="name" value="ADMIN" />
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="CURATOR" />
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ARTIST" />
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="USER" />
+        </insert>
+
+        <rollback>
+            <delete tableName="roles">
+                <where>
+                    name IN ('ADMIN', 'CURATOR', 'ARTIST', 'USER')
+                </where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1.2.2-insert-users" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="users"/>
+        </preConditions>
+
+        <insert tableName="users">
+            <column name="username" value="admin"/>
+            <column name="email" value="admin@gallery.com"/>
+            <column name="password"
+                    value="$2a$10$U.SOxlQMmMOINghKcfZf..mPLYkMnQ/K/DeV6KxtyaeX3LkfdaI7."/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="users">
+                <where>
+                    username IN ('admin')
+                </where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1.2.3-insert-user-roles" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="user_roles"/>
+        </preConditions>
+
+        <sql>
+            INSERT INTO user_roles (user_id, role_id)
+            VALUES (
+                           (SELECT id FROM users WHERE username = 'admin'),
+                           (SELECT id FROM roles WHERE name = 'ADMIN')
+                   );
+        </sql>
+
+        <rollback>
+            <delete tableName="user_roles">
+                <where>
+                    user_id = (SELECT id FROM users WHERE username = 'admin') AND
+                    role_id = (SELECT id FROM roles WHERE name = 'ADMIN')
+                </where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
