@@ -38,6 +38,7 @@ public class SecurityConfig {
         );
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                        "/h2/console",
                         "/api/public/**",
                         "/api/auth/**",
                         "/v3/api-docs/**",
@@ -50,8 +51,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );
-//        http.httpBasic(Customizer.withDefaults());
-        http.formLogin(Customizer.withDefaults());
+        http.httpBasic(Customizer.withDefaults());
+//        http.formLogin(Customizer.withDefaults());
         http.logout(Customizer.withDefaults());
         return http.build();
     }

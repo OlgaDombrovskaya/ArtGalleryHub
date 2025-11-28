@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ExhibitionRepository extends JpaRepository<Exhibition, Long> {
 
-    List<Exhibition> findByExhibitionStatus(ExhibitionStatus status);
+//    List<Exhibition> findByExhibitionStatus(ExhibitionStatus status);
 }
