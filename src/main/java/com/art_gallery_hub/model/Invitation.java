@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "invitations")
@@ -40,5 +41,5 @@ public class Invitation {
 
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp // Automatically sets the date at creation
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }
