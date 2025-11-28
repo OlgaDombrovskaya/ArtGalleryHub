@@ -9,5 +9,6 @@
     <include file="db.changelog-1.0-create-core-tables.xml" relativeToChangelogFile="true"/>
     <include file="db.changelog-1.1-create-artwork-exhibition.xml" relativeToChangelogFile="true"/>
     <include file="db.changelog-1.2-insert-initial-data.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog-1.3-insert-gallery-data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

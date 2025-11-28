@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -38,5 +39,6 @@ public class Invitation {
     private InvitationStatus status;
 
     @Column(name = "created_at", nullable = false)
+    @CreationTimestamp // Automatically sets the date at creation
     private LocalDate createdAt;
 }

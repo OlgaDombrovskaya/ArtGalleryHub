@@ -53,5 +53,6 @@ public class Artwork {
     private boolean isPublic;
 
     @Column(name = "created_at", nullable = false)
+    @CreationTimestamp // Automatically sets the date at creation
     private LocalDate createdAt;
 }
