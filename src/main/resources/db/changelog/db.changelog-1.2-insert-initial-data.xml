@@ -11,22 +11,22 @@
         </preConditions>
 
         <insert tableName="roles">
-            <column name="name" value="ADMIN" />
+            <column name="name" value="ADMIN"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="CURATOR" />
+            <column name="name" value="CURATOR"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="ARTIST" />
+            <column name="name" value="ARTIST"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="USER" />
+            <column name="name" value="VISITOR"/>
         </insert>
 
         <rollback>
             <delete tableName="roles">
                 <where>
-                    name IN ('ADMIN', 'CURATOR', 'ARTIST', 'USER')
+                    name IN ('ADMIN', 'CURATOR', 'ARTIST', 'VISITOR')
                 </where>
             </delete>
         </rollback>
@@ -37,6 +37,7 @@
             <tableIsEmpty tableName="users"/>
         </preConditions>
 
+        <!--user admin-->
         <insert tableName="users">
             <column name="username" value="admin"/>
             <column name="email" value="admin@gallery.com"/>
@@ -44,11 +45,35 @@
                     value="$2a$10$U.SOxlQMmMOINghKcfZf..mPLYkMnQ/K/DeV6KxtyaeX3LkfdaI7."/>
             <column name="enabled" valueBoolean="true"/>
         </insert>
+        <!--user curator-->
+        <insert tableName="users">
+            <column name="username" value="curator"/>
+            <column name="email" value="curator@gallery.com"/>
+            <column name="password"
+                    value="$2a$10$uFipVPZBodrZ7erPxwwZOugW0Pm7/5q2Sr1r0VY0ijkJ5.Ts.Nhve"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+        <!--user artist-->
+        <insert tableName="users">
+            <column name="username" value="artist"/>
+            <column name="email" value="artist@gallery.com"/>
+            <column name="password"
+                    value="$2a$10$3o1X4iu2LhtTyHC4TfhPI.6gHUsRx7vOwS9uVZ.y8ni197Bi2sK0m"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
+        <!--user visitor-->
+        <insert tableName="users">
+            <column name="username" value="visitor"/>
+            <column name="email" value="visitor@gallery.com"/>
+            <column name="password"
+                    value="$2a$10$vaOXRnDMK4aTD7TOBh8ld.VLY/8zqucC7htYtDOTq26Sfla5ffpT6"/>
+            <column name="enabled" valueBoolean="true"/>
+        </insert>
 
         <rollback>
             <delete tableName="users">
                 <where>
-                    username IN ('admin')
+                    username IN ('admin', 'curator', 'artist', 'visitor')
                 </where>
             </delete>
         </rollback>
@@ -59,19 +84,66 @@
             <tableIsEmpty tableName="user_roles"/>
         </preConditions>
 
+        <!--user admin-->
         <sql>
             INSERT INTO user_roles (user_id, role_id)
-            VALUES (
-                           (SELECT id FROM users WHERE username = 'admin'),
-                           (SELECT id FROM roles WHERE name = 'ADMIN')
-                   );
+            VALUES ((SELECT id FROM users WHERE username = 'admin'),
+                    (SELECT id FROM roles WHERE name = 'ADMIN'));
+        </sql>
+        <!--user curator-->
+        <sql>
+            INSERT INTO user_roles (user_id, role_id)
+            VALUES ((SELECT id FROM users WHERE username = 'curator'),
+                    (SELECT id FROM roles WHERE name = 'CURATOR'));
+        </sql>
+        <!--user artist with 2 roles-->
+        <sql>
+            INSERT INTO user_roles (user_id, role_id)
+            VALUES ((SELECT id FROM users WHERE username = 'artist'),
+                    (SELECT id FROM roles WHERE name = 'ARTIST'));
+        </sql>
+        <sql>
+            INSERT INTO user_roles (user_id, role_id)
+            VALUES ((SELECT id FROM users WHERE username = 'artist'),
+                    (SELECT id FROM roles WHERE name = 'VISITOR'));
+        </sql>
+        <!--user visitor-->
+        <sql>
+            INSERT INTO user_roles (user_id, role_id)
+            VALUES ((SELECT id FROM users WHERE username = 'visitor'),
+                    (SELECT id FROM roles WHERE name = 'VISITOR'));
         </sql>
 
         <rollback>
+            <!--user admin-->
             <delete tableName="user_roles">
                 <where>
                     user_id = (SELECT id FROM users WHERE username = 'admin') AND
                     role_id = (SELECT id FROM roles WHERE name = 'ADMIN')
+                </where>
+            </delete>
+            <!--user curator-->
+            <delete tableName="user_roles">
+                <where>
+                    user_id = (SELECT id FROM users WHERE username = 'curator') AND
+                    role_id = (SELECT id FROM roles WHERE name = 'CURATOR')
+                </where>
+            </delete>
+            <!--user artist-->
+            <delete tableName="user_roles">
+                <where>
+                    user_id = (SELECT id FROM users WHERE username = 'artist') AND
+                    role_id IN (
+                    (SELECT id FROM roles WHERE name = 'ARTIST'),
+                    (SELECT id FROM roles WHERE name = 'VISITOR')
+                    )
+                </where>
+            </delete>
+            <!--user visitor-->
+            <delete tableName="user_roles">
+                <where>
+                    user_id = (SELECT id FROM users WHERE username = 'visitor') AND
+                    role_id = (SELECT id FROM roles WHERE name = 'VISITOR')
                 </where>
             </delete>
         </rollback>

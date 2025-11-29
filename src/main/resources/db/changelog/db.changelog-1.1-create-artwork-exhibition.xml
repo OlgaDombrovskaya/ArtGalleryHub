@@ -37,7 +37,7 @@
             <column name="is_public" type="BOOLEAN" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="DATE">
+            <column name="created_at" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -52,7 +52,48 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="1.1.2-create-exhibitions-table" author="arina">
+    <changeSet id="1.1.2-create-reviews-table" author="arina">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="reviews"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="reviews">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_reviews"/>
+            </column>
+            <column name="artwork_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="reviews"
+                                 baseColumnNames="artwork_id"
+                                 constraintName="fk_reviews_artwork"
+                                 referencedTableName="artworks"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="reviews"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_reviews_author"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+
+        <rollback>
+            <dropTable tableName="reviews"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1.1.3-create-exhibitions-table" author="arina">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="exhibitions"/>
@@ -93,7 +134,7 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="1.1.3-create-exhibition-artworks-table" author="arina">
+    <changeSet id="1.1.4-create-exhibition-artworks-table" author="arina">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="exhibition_artworks"/>
@@ -129,47 +170,6 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="1.1.4-create-reviews-table" author="arina">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="reviews"/>
-            </not>
-        </preConditions>
-
-        <createTable tableName="reviews">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_reviews"/>
-            </column>
-            <column name="artwork_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="author_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="rating" type="INT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="comment" type="VARCHAR(255)"/>
-            <column name="created_at" type="DATE">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <addForeignKeyConstraint baseTableName="reviews"
-                                 baseColumnNames="artwork_id"
-                                 constraintName="fk_reviews_artwork"
-                                 referencedTableName="artworks"
-                                 referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="reviews"
-                                 baseColumnNames="author_id"
-                                 constraintName="fk_reviews_author"
-                                 referencedTableName="users"
-                                 referencedColumnNames="id"/>
-
-        <rollback>
-            <dropTable tableName="reviews"/>
-        </rollback>
-    </changeSet>
-
     <changeSet id="1.1.5-create-invitations-table" author="arina">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -190,7 +190,7 @@
             <column name="status" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="DATE">
+            <column name="created_at" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </createTable>

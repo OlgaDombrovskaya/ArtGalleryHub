@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "artworks")
@@ -53,5 +54,6 @@ public class Artwork {
     private boolean isPublic;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createdAt;
+    @CreationTimestamp // Automatically sets the date at creation
+    private LocalDateTime createdAt;
 }
