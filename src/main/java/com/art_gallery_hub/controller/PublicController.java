@@ -2,6 +2,7 @@ package com.art_gallery_hub.controller;
 
 
 import com.art_gallery_hub.model.Artwork;
+import com.art_gallery_hub.repository.ArtworkRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +16,19 @@ import java.util.List;
 @RequestMapping("/api/public")
 public class PublicController {
 
-    @GetMapping("/info")
-    public String publicInfo() {
-        return "Welcome to Art Gallery Hub";
+    private final ArtworkRepository artworkRepository;
+
+    public PublicController(ArtworkRepository artworkRepository) {
+        this.artworkRepository = artworkRepository;
     }
 
-@GetMapping("/artworks")
-    public List<Artwork> getArtworksByIsPublic() {
+    @GetMapping("/info")
+    public String publicInfo() {
+        return "Welcome to Art Gallery Hub - digital art gallery and exhibitions platform";
+    }
 
-}
+    @GetMapping("/artworks")
+    public List<Artwork> getPublicArtworks() {
+        return artworkRepository.findByIsPublicTrue();
+    }
 }

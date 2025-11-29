@@ -25,6 +25,7 @@ public class SecurityConfig {
         @Bean
     public DaoAuthenticationProvider  authenticationProvider(ArtUserDetailsService artUserDetailsService) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(artUserDetailsService);
+//        authenticationProvider.setUserDetailsService(artUserDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
@@ -36,7 +37,8 @@ public class SecurityConfig {
         http.authenticationProvider(authenticationProvider);
         http.csrf(csrf -> csrf.disable());
         http.headers(headers -> headers
-                .frameOptions(frame -> frame.disable())
+                // Нужно для H2-консоли
+                .frameOptions(frame -> frame.sameOrigin())
         );
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
