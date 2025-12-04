@@ -61,12 +61,12 @@ VALUES (1, 3, 'ArtStudio Artist',
 
 --- 5. Insert ARTWORKS (1.3.2)
 -- ID 1, artist_profile_id 1
-INSERT INTO artworks (id, artist_profile_id, title, description, "year", style, image_path, is_public, created_at)
+INSERT INTO artworks (id, artist_profile_id, title, description, artwork_year, style, image_path, is_public, created_at)
 VALUES (1, 1, 'Quiet pond', 'Oil on canvas',
         2024, 'LANDSCAPE', '/images/art/quiet_pond_1.jpg',
         TRUE, NOW());
 -- ID 2, artist_profile_id 1
-INSERT INTO artworks (id, artist_profile_id, title, description, "year", style, image_path, is_public, created_at)
+INSERT INTO artworks (id, artist_profile_id, title, description, artwork_year, style, image_path, is_public, created_at)
 VALUES (2, 1, 'Urban sunset', 'Watercolour',
         2025, 'ABSTRACT', '/images/art/urban_sunset_1.jpg',
         TRUE, NOW());

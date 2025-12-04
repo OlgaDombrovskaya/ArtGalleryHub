@@ -16,7 +16,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -39,7 +38,7 @@ public class Artwork {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column(name = "artwork_year", nullable = false)
     private int year;
 
     @Column(nullable = false)

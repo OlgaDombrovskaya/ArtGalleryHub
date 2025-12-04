@@ -48,7 +48,7 @@ CREATE TABLE artworks (
     artist_profile_id BIGINT NOT NULL,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    "year" BIGINT NOT NULL,
+    artwork_year BIGINT NOT NULL,
     style VARCHAR(50) NOT NULL,
     image_path VARCHAR(255) NOT NULL,
     is_public BOOLEAN NOT NULL DEFAULT TRUE,
