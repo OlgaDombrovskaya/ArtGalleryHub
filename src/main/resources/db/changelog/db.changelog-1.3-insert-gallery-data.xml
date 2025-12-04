@@ -38,7 +38,7 @@
                     valueComputed="(SELECT id FROM artist_profiles WHERE display_name = 'ArtStudio Artist')"/>
             <column name="title" value="Quiet pond"/>
             <column name="description" value="Oil on canvas"/>
-            <column name="year" value="2024"/>
+            <column name="artwork_year" value="2024"/>
             <column name="style" value="LANDSCAPE"/>
             <column name="image_path" value="/images/art/quiet_pond_1.jpg"/>
             <column name="is_public" valueBoolean="true"/>
@@ -50,7 +50,7 @@
                     valueComputed="(SELECT id FROM artist_profiles WHERE display_name = 'ArtStudio Artist')"/>
             <column name="title" value="Urban sunset"/>
             <column name="description" value="Watercolour"/>
-            <column name="year" value="2025"/>
+            <column name="artwork_year" value="2025"/>
             <column name="style" value="ABSTRACT"/>
             <column name="image_path" value="/images/art/urban_sunset_1.jpg"/>
             <column name="is_public" valueBoolean="true"/>
