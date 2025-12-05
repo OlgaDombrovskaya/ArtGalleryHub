@@ -46,12 +46,31 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(String password, String username, Set<Role> roles) {
-        this.password = password;
+    // TODO
+    public User(
+            String username,
+            String password,
+            Set<Role> roles) {
         this.username = username;
+        this.password = password;
         this.roles = roles;
     }
-//Todo
-    public User(String user, String artistPassword, String roleArtist) {
+
+    public User(
+            String username,
+            String email,
+            String password,
+            Set<Role> roles) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    // TODO
+    public User(
+            String user,
+            String artistPassword,
+            String roleArtist) {
     }
 }
