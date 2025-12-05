@@ -44,6 +44,6 @@ public class ArtistController {
                 .orElseThrow();
 
         // 3. получаем работы
-        return artworkRepository.findByArtist_Id(artistProfile.getId());
+        return artworkRepository.findByArtistId(artistProfile.getId());
     }
 }
