@@ -22,8 +22,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-        @Bean
-    public DaoAuthenticationProvider  authenticationProvider(ArtUserDetailsService artUserDetailsService) {
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(ArtUserDetailsService artUserDetailsService) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(artUserDetailsService);
 //        authenticationProvider.setUserDetailsService(artUserDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         );
         http.httpBasic(Customizer.withDefaults());
-//        http.formLogin(Customizer.withDefaults());
+        http.formLogin(Customizer.withDefaults());
         http.logout(Customizer.withDefaults());
         return http.build();
     }
