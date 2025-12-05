@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,8 @@ public class ArtworkService {
     @Transactional
     public ArtworkPublicDetailsResponse getArtworkDetails(Long artworkId) {
         Artwork artwork = artworkRepository.findById(artworkId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
                         "Artwork with ID " + artworkId + " not found"));
 
         List<Review> reviews = reviewRepository.findByArtworkId(artworkId);

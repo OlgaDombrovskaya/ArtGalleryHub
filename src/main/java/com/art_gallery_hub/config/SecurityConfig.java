@@ -48,7 +48,8 @@ public class SecurityConfig {
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/api/email/**",
-                        "/h2-console/**"
+                        "/h2-console/**",
+                        "/error"
                         ).permitAll()
                 .requestMatchers("/api/artist/**").hasRole("ARTIST")
                 .requestMatchers("/api/visitor/**").hasRole("VISITOR")
