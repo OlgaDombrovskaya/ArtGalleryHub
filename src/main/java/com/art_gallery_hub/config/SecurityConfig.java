@@ -42,13 +42,15 @@ public class SecurityConfig {
         );
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/h2-console/**",
                         "/api/public/**",
                         "/api/auth/**",
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/swagger-ui.html"
-                ).permitAll()
+                        "/swagger-ui.html",
+                        "/api/email/**",
+                        "/h2-console/**",
+                        "/error"
+                        ).permitAll()
                 .requestMatchers("/api/artist/**").hasRole("ARTIST")
                 .requestMatchers("/api/visitor/**").hasRole("VISITOR")
                 .requestMatchers("/api/curator/**").hasRole("CURATOR")

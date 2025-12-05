@@ -1,15 +1,19 @@
 --- 1. Insert ROLES (1.2.1)
 INSERT INTO roles (id, name)
-VALUES (1, 'ADMIN');
+-- VALUES (1, 'ADMIN');
+VALUES (1, 'ROLE_ADMIN');
 
 INSERT INTO roles (id, name)
-VALUES (2, 'CURATOR');
+-- VALUES (2, 'CURATOR');
+VALUES (2, 'ROLE_CURATOR');
 
 INSERT INTO roles (id, name)
-VALUES (3, 'ARTIST');
+-- VALUES (3, 'ARTIST');
+VALUES (3, 'ROLE_ARTIST');
 
 INSERT INTO roles (id, name)
-VALUES (4, 'VISITOR');
+-- VALUES (4, 'VISITOR');
+VALUES (4, 'ROLE_VISITOR');
 
 --- 2. Insert USERS (1.2.2)
 -- ID 1
@@ -61,12 +65,12 @@ VALUES (1, 3, 'ArtStudio Artist',
 
 --- 5. Insert ARTWORKS (1.3.2)
 -- ID 1, artist_profile_id 1
-INSERT INTO artworks (id, artist_profile_id, title, description, "year", style, image_path, is_public, created_at)
+INSERT INTO artworks (id, artist_profile_id, title, description, artwork_year, style, image_path, is_public, created_at)
 VALUES (1, 1, 'Quiet pond', 'Oil on canvas',
         2024, 'LANDSCAPE', '/images/art/quiet_pond_1.jpg',
         TRUE, NOW());
 -- ID 2, artist_profile_id 1
-INSERT INTO artworks (id, artist_profile_id, title, description, "year", style, image_path, is_public, created_at)
+INSERT INTO artworks (id, artist_profile_id, title, description, artwork_year, style, image_path, is_public, created_at)
 VALUES (2, 1, 'Urban sunset', 'Watercolour',
         2025, 'ABSTRACT', '/images/art/urban_sunset_1.jpg',
         TRUE, NOW());
@@ -100,3 +104,14 @@ VALUES (1, 2);
 -- ID 1, exhibition 1, artist_profile_id 1
 INSERT INTO invitations (id, exhibition_id, artist_profile_id, status, created_at)
 VALUES (1, 1, 1, 'PENDING', NOW());
+
+---------------------------------------------------------------
+-- 10. Обновление счетчика ID для таблиц
+ALTER TABLE users ALTER COLUMN id RESTART WITH 5; -- (После 4 пользователей)
+ALTER TABLE roles ALTER COLUMN id RESTART WITH 5; -- (После 4 ролей)
+ALTER TABLE artist_profiles ALTER COLUMN id RESTART WITH 2; -- (После 1 профиля)
+ALTER TABLE artworks ALTER COLUMN id RESTART WITH 3; -- (После 2 произведений)
+ALTER TABLE reviews ALTER COLUMN id RESTART WITH 3; -- (После 2 отзывов)
+ALTER TABLE exhibitions ALTER COLUMN id RESTART WITH 2; -- (После 1 выставки)
+ALTER TABLE invitations ALTER COLUMN id RESTART WITH 2; -- (После 1 приглашения)
+-- ... и так далее для всех таблиц с GENERATED AS IDENTITY

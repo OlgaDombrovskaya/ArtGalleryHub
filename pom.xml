@@ -77,11 +77,6 @@
             <version>2.5.0</version>
         </dependency>
         <dependency>
-            <groupId>com.art_gallery_hub</groupId>
-            <artifactId>ArtGalleryHub</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
