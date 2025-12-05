@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,41 +23,48 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-        @Bean
-    public DaoAuthenticationProvider  authenticationProvider(ArtUserDetailsService artUserDetailsService) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(artUserDetailsService);
-//        authenticationProvider.setUserDetailsService(artUserDetailsService);
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(ArtUserDetailsService appUserDetailsService) {
+        DaoAuthenticationProvider authenticationProvider =
+                new DaoAuthenticationProvider(appUserDetailsService);
+//        authenticationProvider.setUserDetailsPasswordService(appUserDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   DaoAuthenticationProvider authenticationProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,DaoAuthenticationProvider authenticationProvider
+    ) throws Exception {
         http.authenticationProvider(authenticationProvider);
+
         http.csrf(csrf -> csrf.disable());
+
         http.headers(headers -> headers
-                // Нужно для H2-консоли
-                .frameOptions(frame -> frame.sameOrigin())
+                .frameOptions(frame -> frame.disable())
         );
+
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/h2/console",
                         "/api/public/**",
                         "/api/auth/**",
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/swagger-ui.html"
+                        "/swagger-ui.html",
+                        "/api/admin/user" //только для теста
                 ).permitAll()
                 .requestMatchers("/api/artist/**").hasRole("ARTIST")
                 .requestMatchers("/api/visitor/**").hasRole("VISITOR")
                 .requestMatchers("/api/curator/**").hasRole("CURATOR")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
         );
-        http.httpBasic(Customizer.withDefaults());
-//        http.formLogin(Customizer.withDefaults());
+//        http.httpBasic(Customizer.withDefaults());
+
+        // ОТКЛЮЧАЕМ basic-auth, чтобы не было всплывающего окна браузера
+        http.httpBasic(AbstractHttpConfigurer::disable);
+
+        http.formLogin(Customizer.withDefaults());
         http.logout(Customizer.withDefaults());
         return http.build();
     }
