@@ -34,10 +34,14 @@ public class UserService {
             RoleStatus roleName
     ) {
         if (userRepository.findByUsername(userRegistrationRequest.username()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "User with name " + userRegistrationRequest.username() + " already exists");
         }
         Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Role with name " + roleName + " not found"));
 
         String encodedPassword = passwordEncoder.encode(userRegistrationRequest.password());
 
