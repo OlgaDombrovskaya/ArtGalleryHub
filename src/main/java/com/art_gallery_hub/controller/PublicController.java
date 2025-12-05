@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "Public API", description = "Endpoints for unauthenticated access " +
-        "to general gallery information, public artworks, and exhibitions")
+@Tag(
+        name = "Public Artworks and Viewing",
+        description = "Endpoints for unauthenticated access to general " +
+                "gallery information, public artworks, and exhibitions")
 @RestController
 @RequestMapping("/api/public")
 @RequiredArgsConstructor
