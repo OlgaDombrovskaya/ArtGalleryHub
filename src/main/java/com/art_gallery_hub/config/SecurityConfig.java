@@ -24,10 +24,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(ArtUserDetailsService appUserDetailsService) {
-        DaoAuthenticationProvider authenticationProvider =
-                new DaoAuthenticationProvider(appUserDetailsService);
-//        authenticationProvider.setUserDetailsPasswordService(appUserDetailsService);
+    public DaoAuthenticationProvider authenticationProvider(ArtUserDetailsService artUserDetailsService) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(artUserDetailsService);
+//        authenticationProvider.setUserDetailsService(artUserDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
@@ -50,8 +49,10 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
                         "/swagger-ui.html",
-                        "/api/admin/user" //только для теста
-                ).permitAll()
+                        "/api/email/**",
+                        "/h2-console/**",
+                        "/error"
+                        ).permitAll()
                 .requestMatchers("/api/artist/**").hasRole("ARTIST")
                 .requestMatchers("/api/visitor/**").hasRole("VISITOR")
                 .requestMatchers("/api/curator/**").hasRole("CURATOR")
@@ -59,11 +60,7 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
         );
-//        http.httpBasic(Customizer.withDefaults());
-
-        // ОТКЛЮЧАЕМ basic-auth, чтобы не было всплывающего окна браузера
-        http.httpBasic(AbstractHttpConfigurer::disable);
-
+        http.httpBasic(Customizer.withDefaults());
         http.formLogin(Customizer.withDefaults());
         http.logout(Customizer.withDefaults());
         return http.build();

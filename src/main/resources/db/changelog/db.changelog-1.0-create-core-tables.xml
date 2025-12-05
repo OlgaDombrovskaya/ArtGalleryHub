@@ -109,7 +109,7 @@
             <column name="display_name" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="bio" type="VARCHAR(255)">
+            <column name="bio" type="TEXT">
                 <constraints nullable="false"/>
             </column>
             <column name="website" type="VARCHAR(50)"/>

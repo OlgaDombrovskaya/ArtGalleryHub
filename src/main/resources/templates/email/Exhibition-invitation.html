@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exhibition Invitation</title>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif; color: black">
+
+<h2 th:text="${exhibitionTitle}">Exhibition Title</h2>
+<p>Hello <b th:text="${artistName}">Artist</b></p>
+<p>You have been invited to participate in the exhibition.</p>
+
+<p><strong>Dates:</strong> <span th:text="${dates}">Dates</span></p>
+<p><strong>Times:</strong> <span th:text="${times}">Times</span></p>
+<p><strong>Message:</strong> <span th:text="${message}">Message</span></p>
+<p><strong>Description:</strong> <span th:text="${description}">Exhibition description</span></p>
+
+<p>You can accept or decline the invitation here:</p>
+<p> <a th:href="${url}">Go to system</a></p>
+</body>
+</html>

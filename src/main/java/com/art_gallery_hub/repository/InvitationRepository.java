@@ -9,7 +9,10 @@ import java.util.List;
 
 public interface InvitationRepository extends JpaRepository<Invitation, Long> {
 
-    List<Invitation> findByExhibition_Id(Long exhibitionId);
+    List<Invitation> findByExhibitionId(Long exhibitionId);
 
-    List<Invitation> findByArtist_Id(Long artistId);
+    List<Invitation> findByArtistId(Long artistId);
+//    List<Invitation> findByExhibition(Long exhibitionId);
+//
+//    List<Invitation> findByArtist(Long artistId);
 }

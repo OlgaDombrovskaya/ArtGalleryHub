@@ -25,7 +25,7 @@
             <column name="description" type="TEXT">
                 <constraints nullable="false"/>
             </column>
-            <column name="year" type="BIGINT">
+            <column name="artwork_year" type="INT">
                 <constraints nullable="false"/>
             </column>
             <column name="style" type="VARCHAR(50)">
