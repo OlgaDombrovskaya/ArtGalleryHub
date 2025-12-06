@@ -12,7 +12,6 @@ public interface ArtworkRepository extends JpaRepository<Artwork,Long> {
 //    List<Artwork> findByUser_Id(Long id);
 
 //    List<Artwork> findByArtist(String artist);
-List<Artwork> findByIsPublicTrue();
     List<Artwork> findByArtistId(Long artistId);
 //    List<Artwork> findByArtist(Long artistId);
 

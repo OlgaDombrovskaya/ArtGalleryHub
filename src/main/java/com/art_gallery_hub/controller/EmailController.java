@@ -27,7 +27,9 @@ public class EmailController {
             @RequestParam String artistName,
             @RequestParam String exhibitionTitle,
             @RequestParam String dates,
-            @RequestParam String description
+            @RequestParam String description,
+            @RequestParam String message,
+            @RequestParam String times
     ) {
 
         Map<String, Object> vars = Map.of(
@@ -35,7 +37,10 @@ public class EmailController {
                 "exhibitionTitle", exhibitionTitle,
                 "dates", dates,
                 "description", description,
+                "message", message,
+                "times", times,
                 "url", "https://artist.gallery.com"
+
         );
 
         emailService.sendTemplateEmail(
