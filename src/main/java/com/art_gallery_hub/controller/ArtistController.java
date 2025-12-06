@@ -1,7 +1,10 @@
 package com.art_gallery_hub.controller;
 
-import com.art_gallery_hub.dto.ArtistProfileResponse;
-import com.art_gallery_hub.dto.ArtistProfileUpdateRequest;
+import com.art_gallery_hub.dto.artist_profile.ArtistProfileResponse;
+import com.art_gallery_hub.dto.artist_profile.ArtistProfileUpdateRequest;
+import com.art_gallery_hub.dto.artwork.ArtworkCreateRequest;
+import com.art_gallery_hub.dto.artwork.ArtworkPrivateResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
 import com.art_gallery_hub.model.ArtistProfile;
 import com.art_gallery_hub.model.Artwork;
 import com.art_gallery_hub.model.User;
@@ -9,8 +12,11 @@ import com.art_gallery_hub.repository.ArtistProfileRepository;
 import com.art_gallery_hub.repository.ArtworkRepository;
 import com.art_gallery_hub.repository.UserRepository;
 import com.art_gallery_hub.service.ArtistProfileService;
+import com.art_gallery_hub.service.ArtworkService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +40,7 @@ import java.util.List;
 public class ArtistController {
 
     private final ArtistProfileService artistProfileService;
-    private final ArtistProfileRepository artistProfileRepository;
-    private final ArtworkRepository artworkRepository;
-    private final UserRepository userRepository;
+    private final ArtworkService artworkService;
 
     // GET /api/artist/profile – view your ArtistProfile
     @GetMapping("/profile")
@@ -55,32 +59,25 @@ public class ArtistController {
                 userDetails.getUsername(), artistProfileUpdateRequest);
     }
 
-    // TODO
     // POST /api/artist/artworks – creating a work (painting) with image upload (MultipartFile)
     @PostMapping("/artworks")
-    public void createArtwork(
-            @RequestPart("artwork") ArtworkCreationRequest request, // Данные о работе
-            @RequestPart("image") MultipartFile image,             // Файл изображения
+    public ResponseEntity<ArtworkPublicSummaryResponse> createArtwork(
+            @RequestPart("artwork") ArtworkCreateRequest request,
+            @RequestPart("image") MultipartFile imageFile,
             @AuthenticationPrincipal UserDetails userDetails) {
-        carService.attachImage(id, file);
+        ArtworkPublicSummaryResponse response = artworkService.createArtwork(
+                request,
+                imageFile,
+                userDetails.getUsername());
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // GET /api/artist/artworks/my – list of your own works
     @GetMapping("/artworks/my")
-    public List<Artwork> getMyArtworks(@AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        // 1. получаем USER
-        User user = userRepository
-                .findByUsername(username)
-                .orElseThrow();
-
-        // 2. получаем профиль художника
-        ArtistProfile artistProfile = artistProfileRepository
-                .findByUser(user)
-                .orElseThrow();
-
-        // 3. получаем работы
-        return artworkRepository.findByArtistId(artistProfile.getId());
+    public List<ArtworkPrivateResponse> getMyArtworks(@AuthenticationPrincipal UserDetails userDetails) {
+        return artworkService.getArtworksPrivate(
+                userDetails.getUsername());
     }
 
     // PUT /api/artist/artworks/{id} – editing (only your own works)
