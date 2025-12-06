@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Participation Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; color:black;">
+
+<h2 th:text="${exhibitionTitle}">Exhibition Title</h2>
+<p>Hello Curator,</p>
+<p>
+    Artist <b th:text="${artistName}">Artist Name</b> has accepted the invitation to participate in your exhibition.
+</p>
+<p>
+    <strong>Artist information:</strong>
+    <br>
+    <span th:text="${artistBio}">Short bio of the artist will appear here</span>
+</p>
+
+<p>
+    The exhibition entry has been successfully updated. You can continue managing the event in the system.
+</p>
+
+</body>
+</html>
