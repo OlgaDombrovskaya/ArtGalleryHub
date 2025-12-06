@@ -1,6 +1,6 @@
 package com.art_gallery_hub.mapper;
 
-import com.art_gallery_hub.dto.ReviewResponse;
+import com.art_gallery_hub.dto.review.ReviewResponse;
 import com.art_gallery_hub.model.Review;
 import org.springframework.stereotype.Component;
 

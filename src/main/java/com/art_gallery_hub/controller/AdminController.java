@@ -1,6 +1,6 @@
 package com.art_gallery_hub.controller;
 
-import com.art_gallery_hub.dto.UserAdminSummaryResponse;
+import com.art_gallery_hub.dto.user.UserAdminSummaryResponse;
 
 import com.art_gallery_hub.repository.UserRepository;
 import com.art_gallery_hub.service.UserService;

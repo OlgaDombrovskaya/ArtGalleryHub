@@ -1,8 +1,8 @@
 package com.art_gallery_hub.controller;
 
-import com.art_gallery_hub.dto.ArtworkPublicDetailsResponse;
-import com.art_gallery_hub.dto.ArtworkPublicSummaryResponse;
-import com.art_gallery_hub.dto.ExhibitionSummaryResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkPublicDetailsResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
+import com.art_gallery_hub.dto.exhibition.ExhibitionSummaryResponse;
 import com.art_gallery_hub.service.ArtworkService;
 import com.art_gallery_hub.service.ExhibitionService;
 import io.swagger.v3.oas.annotations.tags.Tag;

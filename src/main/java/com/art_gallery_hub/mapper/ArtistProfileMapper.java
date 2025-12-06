@@ -1,6 +1,6 @@
 package com.art_gallery_hub.mapper;
 
-import com.art_gallery_hub.dto.ArtistProfileResponse;
+import com.art_gallery_hub.dto.artist_profile.ArtistProfileResponse;
 import com.art_gallery_hub.model.ArtistProfile;
 import org.springframework.stereotype.Component;
 

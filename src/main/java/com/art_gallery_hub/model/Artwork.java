@@ -50,7 +50,7 @@ public class Artwork {
     private String imagePath;
 
     @Column(name = "is_public", nullable = false)
-    private boolean isPublic;
+    private boolean isPublic = true;
 
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp // Automatically sets the date at creation

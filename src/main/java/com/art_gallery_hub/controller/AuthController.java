@@ -1,7 +1,7 @@
 package com.art_gallery_hub.controller;
 
-import com.art_gallery_hub.dto.UserRegistrationRequest;
-import com.art_gallery_hub.dto.UserRegistrationResponse;
+import com.art_gallery_hub.dto.user.UserRegistrationRequest;
+import com.art_gallery_hub.dto.user.UserRegistrationResponse;
 import com.art_gallery_hub.enums.RoleStatus;
 import com.art_gallery_hub.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;

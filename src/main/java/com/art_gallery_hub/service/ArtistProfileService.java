@@ -1,7 +1,7 @@
 package com.art_gallery_hub.service;
 
-import com.art_gallery_hub.dto.ArtistProfileResponse;
-import com.art_gallery_hub.dto.ArtistProfileUpdateRequest;
+import com.art_gallery_hub.dto.artist_profile.ArtistProfileResponse;
+import com.art_gallery_hub.dto.artist_profile.ArtistProfileUpdateRequest;
 import com.art_gallery_hub.mapper.ArtistProfileMapper;
 import com.art_gallery_hub.model.ArtistProfile;
 import com.art_gallery_hub.model.User;

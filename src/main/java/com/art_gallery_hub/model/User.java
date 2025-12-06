@@ -35,7 +35,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private boolean enabled;
+    private boolean enabled = true;
 
     // TODO
     @ManyToMany(fetch = FetchType.EAGER)
