@@ -41,7 +41,7 @@ public class ArtworkService {
         Artwork artwork = artworkRepository.findById(artworkId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Artwork with ID " + artworkId + " not found"));
+                        "Artwork not found with ID: " + artworkId));
 
         List<Review> reviews = reviewRepository.findByArtworkId(artworkId);
 

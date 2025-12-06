@@ -30,23 +30,23 @@ public class UserService {
 
     @Transactional
     public UserRegistrationResponse createUser(
-            UserRegistrationRequest userRegistrationRequest,
+            UserRegistrationRequest request,
             RoleStatus roleName
     ) {
-        if (userRepository.findByUsername(userRegistrationRequest.username()).isPresent()) {
+        if (userRepository.findByUsername(request.username()).isPresent()) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "User with name " + userRegistrationRequest.username() + " already exists");
+                    "User already exists with name: " + request.username());
         }
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Role with name " + roleName + " not found"));
+                        "Role not found with name: " + roleName));
 
-        String encodedPassword = passwordEncoder.encode(userRegistrationRequest.password());
+        String encodedPassword = passwordEncoder.encode(request.password());
 
         User newUser = userRepository.save(
-                userMapper.toEntity(userRegistrationRequest, encodedPassword, role));
+                userMapper.toEntity(request, encodedPassword, role));
 
         return userMapper.toUserRegistrationResponse(newUser);
     }

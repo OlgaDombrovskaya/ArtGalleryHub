@@ -25,7 +25,8 @@ public class AuthController {
 
     // POST /api/auth/register-artist – registration of a user with the ARTIST role
     @PostMapping("/register-artist")
-    public ResponseEntity<UserRegistrationResponse> registerArtist(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+    public ResponseEntity<UserRegistrationResponse> registerArtist(
+            @RequestBody UserRegistrationRequest userRegistrationRequest) {
         UserRegistrationResponse response =
                 userService.createUser(userRegistrationRequest, RoleStatus.ROLE_ARTIST);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -33,7 +34,8 @@ public class AuthController {
 
     // POST /api/auth/register-visitor – VISITOR registration
     @PostMapping("/register-visitor")
-    public ResponseEntity<UserRegistrationResponse> registerVisitor(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+    public ResponseEntity<UserRegistrationResponse> registerVisitor(
+            @RequestBody UserRegistrationRequest userRegistrationRequest) {
         UserRegistrationResponse response =
                 userService.createUser(userRegistrationRequest, RoleStatus.ROLE_VISITOR);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
