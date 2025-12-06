@@ -10,6 +10,7 @@ import com.art_gallery_hub.model.Review;
 import com.art_gallery_hub.repository.ArtworkRepository;
 import com.art_gallery_hub.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArtworkService {
@@ -28,8 +30,10 @@ public class ArtworkService {
 
     @Transactional
     public List<ArtworkPublicSummaryResponse> getAllArtworks() {
+        log.info("Fetching all public artworks");
 
         List<Artwork> artworks = artworkRepository.findByIsPublicTrue();
+        log.info("Found {} public artworks", artworks.size());
 
         return artworks.stream()
                 .map(artwork -> artworkMapper.toArtworkPublicSummaryResponse(artwork))
@@ -38,12 +42,18 @@ public class ArtworkService {
 
     @Transactional
     public ArtworkPublicDetailsResponse getArtworkDetails(Long artworkId) {
+        log.info("Fetching artwork details for id={}", artworkId);
+
         Artwork artwork = artworkRepository.findById(artworkId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Artwork with ID " + artworkId + " not found"));
+                .orElseThrow(() -> {
+                    log.warn("Artwork with id={} not found", artworkId);
+                    return new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Artwork with ID " + artworkId + " not found");
+                });
 
         List<Review> reviews = reviewRepository.findByArtworkId(artworkId);
+        log.info("Found {} reviews for artwork id={}", reviews.size(), artworkId);
 
         List<ReviewResponse> reviewResponses = reviews.stream()
                 .map(review -> reviewMapper.toReviewResponse(review))

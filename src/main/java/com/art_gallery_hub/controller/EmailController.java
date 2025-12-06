@@ -28,6 +28,8 @@ public class EmailController {
             @RequestParam String dates,
             @RequestParam String description
     ) {
+        log.info("EmailController: sending exhibition invitation to '{}' for exhibition '{}'",
+                emailTo, exhibitionTitle);
 
         Map<String, Object> vars = Map.of(
                 "artistName", artistName,
@@ -43,7 +45,7 @@ public class EmailController {
                 "email/exhibition-invitation",
                 vars
         );
-
+        log.info("EmailController: invitation email successfully queued for '{}'", emailTo);
         return ResponseEntity.ok("Invitation email sent to " + emailTo);
     }
     @PostMapping("/confirmation")
@@ -54,6 +56,8 @@ public class EmailController {
             @RequestParam String artistBio
     ) {
 
+        log.info("EmailController: sending participation confirmation to '{}' for exhibition '{}'",
+                emailTo, exhibitionTitle);
         Map<String, Object> vars = Map.of(
                 "artistName", artistName,
                 "exhibitionTitle", exhibitionTitle,
@@ -66,7 +70,7 @@ public class EmailController {
                 "email/participation-confirmation",
                 vars
         );
-
+        log.info("EmailController: confirmation email successfully queued for '{}'", emailTo);
         return ResponseEntity.ok("Confirmation email sent to " + emailTo);
     }
 }
