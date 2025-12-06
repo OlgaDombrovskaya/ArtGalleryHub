@@ -2,7 +2,6 @@ package com.art_gallery_hub.controller;
 
 import com.art_gallery_hub.model.Exhibition;
 import com.art_gallery_hub.repository.ExhibitionRepository;
-import com.art_gallery_hub.repository.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

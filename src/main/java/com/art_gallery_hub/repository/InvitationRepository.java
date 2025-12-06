@@ -1,7 +1,5 @@
 package com.art_gallery_hub.repository;
 
-import com.art_gallery_hub.model.ArtistProfile;
-import com.art_gallery_hub.model.Exhibition;
 import com.art_gallery_hub.model.Invitation;
 import org.springframework.data.jpa.repository.JpaRepository;
 

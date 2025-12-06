@@ -1,18 +1,14 @@
 --- 1. Insert ROLES (1.2.1)
 INSERT INTO roles (id, name)
--- VALUES (1, 'ADMIN');
 VALUES (1, 'ROLE_ADMIN');
 
 INSERT INTO roles (id, name)
--- VALUES (2, 'CURATOR');
 VALUES (2, 'ROLE_CURATOR');
 
 INSERT INTO roles (id, name)
--- VALUES (3, 'ARTIST');
 VALUES (3, 'ROLE_ARTIST');
 
 INSERT INTO roles (id, name)
--- VALUES (4, 'VISITOR');
 VALUES (4, 'ROLE_VISITOR');
 
 --- 2. Insert USERS (1.2.2)

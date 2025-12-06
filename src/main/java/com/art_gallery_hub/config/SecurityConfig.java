@@ -30,16 +30,17 @@ public class SecurityConfig {
         return authenticationProvider;
     }
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   DaoAuthenticationProvider authenticationProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,DaoAuthenticationProvider authenticationProvider
+    ) throws Exception {
         http.authenticationProvider(authenticationProvider);
+
         http.csrf(csrf -> csrf.disable());
+
         http.headers(headers -> headers
-                // Нужно для H2-консоли
-                .frameOptions(frame -> frame.sameOrigin())
+                .frameOptions(frame -> frame.disable())
         );
+
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/api/public/**",
@@ -55,6 +56,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/visitor/**").hasRole("VISITOR")
                 .requestMatchers("/api/curator/**").hasRole("CURATOR")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
         );
         http.httpBasic(Customizer.withDefaults());

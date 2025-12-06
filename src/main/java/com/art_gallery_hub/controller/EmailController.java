@@ -1,6 +1,5 @@
 package com.art_gallery_hub.controller;
 
-
 import com.art_gallery_hub.service.EmailService;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
