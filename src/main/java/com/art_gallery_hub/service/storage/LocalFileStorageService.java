@@ -43,6 +43,6 @@ public class LocalFileStorageService implements FileStorageService {
         String origFileName = file.getOriginalFilename();
         String randomUuid = UUID.randomUUID().toString();
 
-        return origFileName + "_" + randomUuid;
+        return randomUuid + "_" + origFileName;
     }
 }
