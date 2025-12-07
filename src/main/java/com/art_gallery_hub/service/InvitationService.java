@@ -3,8 +3,12 @@ package com.art_gallery_hub.service;
 import com.art_gallery_hub.dto.invitation.InvitationResponse;
 import com.art_gallery_hub.enums.InvitationStatus;
 import com.art_gallery_hub.mapper.InvitationMapper;
+import com.art_gallery_hub.model.ArtistProfile;
 import com.art_gallery_hub.model.Invitation;
+import com.art_gallery_hub.model.User;
+import com.art_gallery_hub.repository.ArtistProfileRepository;
 import com.art_gallery_hub.repository.InvitationRepository;
+import com.art_gallery_hub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,8 +21,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InvitationService {
 
+    private final UserRepository userRepository;
+    private final ArtistProfileRepository artistProfileRepository;
     private final InvitationRepository invitationRepository;
     private final InvitationMapper invitationMapper;
+
+    private User findUserOrThrow(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User not found with username: " + username));
+    }
+
+    private ArtistProfile findProfileOrThrow(Long userId) {
+        return artistProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Artist Profile not found with user ID: " + userId));
+    }
 
     private Invitation findInvitationOrThrow(Long invitationId) {
         return invitationRepository.findById(invitationId)
@@ -28,8 +48,11 @@ public class InvitationService {
     }
 
     @Transactional
-    public List<InvitationResponse> getAllInvitations() {
-        List<Invitation> invitations = invitationRepository.findAll();
+    public List<InvitationResponse> getAllInvitationsByArtist(String username) {
+        User user = findUserOrThrow(username);
+        ArtistProfile artistProfile = findProfileOrThrow(user.getId());
+
+        List<Invitation> invitations = invitationRepository.findByArtistId(artistProfile.getId());
 
         return invitations.stream()
                 .map(response -> invitationMapper.toInvitationResponse(response))
