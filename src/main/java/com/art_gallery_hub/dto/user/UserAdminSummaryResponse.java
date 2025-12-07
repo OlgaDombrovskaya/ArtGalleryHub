@@ -1,4 +1,4 @@
-package com.art_gallery_hub.dto;
+package com.art_gallery_hub.dto.user;
 
 import java.util.Set;
 

@@ -40,7 +40,7 @@
             <column name="description" value="Oil on canvas"/>
             <column name="artwork_year" value="2024"/>
             <column name="style" value="LANDSCAPE"/>
-            <column name="image_path" value="/images/art/quiet_pond_1.jpg"/>
+            <column name="image_path" value="http://localhost:8080/quiet_pond_1.jpg"/>
             <column name="is_public" valueBoolean="true"/>
             <column name="created_at" valueComputed="NOW()"/>
         </insert>
@@ -52,7 +52,7 @@
             <column name="description" value="Watercolour"/>
             <column name="artwork_year" value="2025"/>
             <column name="style" value="ABSTRACT"/>
-            <column name="image_path" value="/images/art/urban_sunset_1.jpg"/>
+            <column name="image_path" value="http://localhost:8080/urban_sunset_1.jpg"/>
             <column name="is_public" valueBoolean="true"/>
             <column name="created_at" valueComputed="NOW()"/>
         </insert>

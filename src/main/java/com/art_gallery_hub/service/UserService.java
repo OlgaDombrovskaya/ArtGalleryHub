@@ -1,8 +1,8 @@
 package com.art_gallery_hub.service;
 
-import com.art_gallery_hub.dto.UserRegistrationRequest;
-import com.art_gallery_hub.dto.UserAdminSummaryResponse;
-import com.art_gallery_hub.dto.UserRegistrationResponse;
+import com.art_gallery_hub.dto.user.UserRegistrationRequest;
+import com.art_gallery_hub.dto.user.UserAdminSummaryResponse;
+import com.art_gallery_hub.dto.user.UserRegistrationResponse;
 import com.art_gallery_hub.enums.RoleStatus;
 import com.art_gallery_hub.mapper.UserMapper;
 import com.art_gallery_hub.model.Role;
@@ -32,25 +32,23 @@ public class UserService {
 
     @Transactional
     public UserRegistrationResponse createUser(
-            UserRegistrationRequest userRegistrationRequest,
+            UserRegistrationRequest request,
             RoleStatus roleName
     ) {
-        if (userRepository.findByUsername(userRegistrationRequest.username()).isPresent()) {
-            log.warn("Cannot create user already exists");
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+        if (userRepository.findByUsername(request.username()).isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "User already exists with name: " + request.username());
         }
         Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> {
-                    log.error("Role {} not found in database", roleName);
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found");
-                });
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Role not found with name: " + roleName));
 
-        String encodedPassword = passwordEncoder.encode(userRegistrationRequest.password());
+        String encodedPassword = passwordEncoder.encode(request.password());
 
         User newUser = userRepository.save(
-                userMapper.toEntity(userRegistrationRequest, encodedPassword, role));
-        log.info("User created: id={} username='{}' role={}",
-                newUser.getId(), newUser.getUsername(), roleName);
+                userMapper.toEntity(request, encodedPassword, role));
 
         return userMapper.toUserRegistrationResponse(newUser);
     }

@@ -26,7 +26,9 @@ public class EmailController {
             @RequestParam String artistName,
             @RequestParam String exhibitionTitle,
             @RequestParam String dates,
-            @RequestParam String description
+            @RequestParam String description,
+            @RequestParam String message,
+            @RequestParam String times
     ) {
         log.info("EmailController: sending exhibition invitation to '{}' for exhibition '{}'",
                 emailTo, exhibitionTitle);
@@ -36,7 +38,10 @@ public class EmailController {
                 "exhibitionTitle", exhibitionTitle,
                 "dates", dates,
                 "description", description,
+                "message", message,
+                "times", times,
                 "url", "https://artist.gallery.com"
+
         );
 
         emailService.sendTemplateEmail(

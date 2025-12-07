@@ -1,8 +1,8 @@
 package com.art_gallery_hub.mapper;
 
-import com.art_gallery_hub.dto.UserRegistrationRequest;
-import com.art_gallery_hub.dto.UserAdminSummaryResponse;
-import com.art_gallery_hub.dto.UserRegistrationResponse;
+import com.art_gallery_hub.dto.user.UserRegistrationRequest;
+import com.art_gallery_hub.dto.user.UserAdminSummaryResponse;
+import com.art_gallery_hub.dto.user.UserRegistrationResponse;
 import com.art_gallery_hub.model.Role;
 import com.art_gallery_hub.model.User;
 import org.springframework.stereotype.Component;
