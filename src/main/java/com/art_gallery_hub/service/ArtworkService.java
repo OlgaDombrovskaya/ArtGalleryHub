@@ -6,6 +6,7 @@ import com.art_gallery_hub.dto.artwork.ArtworkPublicDetailsResponse;
 import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
 import com.art_gallery_hub.dto.artwork.ArtworkUpdateRequest;
 import com.art_gallery_hub.dto.review.ReviewResponse;
+import com.art_gallery_hub.enums.Style;
 import com.art_gallery_hub.mapper.ArtworkMapper;
 import com.art_gallery_hub.mapper.ReviewMapper;
 import com.art_gallery_hub.model.ArtistProfile;
@@ -63,23 +64,23 @@ public class ArtworkService {
     }
 
     @Transactional
-    public List<ArtworkPublicSummaryResponse> getAllArtworks() {
+    public List<ArtworkPublicSummaryResponse> getAllPublicArtworks() {
         List<Artwork> artworks = artworkRepository.findByIsPublicTrue();
         log.info("Found {} public artworks", artworks.size());
 
         return artworks.stream()
-                .map(artwork -> artworkMapper.toArtworkPublicSummaryResponse(artwork))
+                .map(artworkMapper::toArtworkPublicSummaryResponse)
                 .toList();
     }
 
     @Transactional
-    public ArtworkPublicDetailsResponse getArtworkDetails(Long artworkId) {
+    public ArtworkPublicDetailsResponse getArtworkPublicDetails(Long artworkId) {
         Artwork artwork = findArtworkOrThrow(artworkId);
         List<Review> reviews = reviewRepository.findByArtworkId(artworkId);
         log.info("Found {} reviews for artwork id={}", reviews.size(), artworkId);
 
         List<ReviewResponse> reviewResponses = reviews.stream()
-                .map(review -> reviewMapper.toReviewResponse(review))
+                .map(reviewMapper::toReviewResponse)
                 .toList();
 
         return artworkMapper.toArtworkPublicDetailsResponse(artwork, reviewResponses);
@@ -101,13 +102,11 @@ public class ArtworkService {
 
         String imagePath = localFileStorageService.storeFile(imageFile);
 
-        Artwork newArtwork = new Artwork();
-        newArtwork.setArtist(artistProfile);
-        newArtwork.setTitle(request.title());
-        newArtwork.setDescription(request.description());
-        newArtwork.setYear(request.year());
-        newArtwork.setStyle(request.style());
-        newArtwork.setImagePath(imagePath);
+        Artwork newArtwork = artworkMapper.toEntity(
+                artistProfile,
+                request,
+                imagePath
+        );
 
         Artwork savedArtwork = artworkRepository.save(newArtwork);
 
@@ -115,14 +114,14 @@ public class ArtworkService {
     }
 
     @Transactional
-    public List<ArtworkArtistResponse> getArtworksPrivate(String username) {
+    public List<ArtworkArtistResponse> getArtworksForArtist(String username) {
         User user = findUserOrThrow(username);
         ArtistProfile artistProfile = findProfileOrThrow(user.getId());
 
         List<Artwork> artworks = artworkRepository.findByArtistId(artistProfile.getId());
 
         return artworks.stream()
-                .map(artwork -> artworkMapper.toArtworkArtistResponse(artwork))
+                .map(artworkMapper::toArtworkArtistResponse)
                 .toList();
     }
 
@@ -149,5 +148,37 @@ public class ArtworkService {
         Artwork artwork = findArtworkOrThrow(artworkId);
 
         artworkRepository.delete(artwork);
+    }
+
+    @Transactional
+    public List<ArtworkPublicSummaryResponse> getAllPublicArtworksWithFilter(
+            String style,
+            Integer year,
+            String artist
+    ) {
+        Style styleEnum = convertStyleStringToEnum(style);
+
+        List<Artwork> artworks = artworkRepository.findPublicArtworksFiltered(
+                styleEnum,
+                year,
+                artist
+        );
+
+        return artworks.stream()
+                .map(artworkMapper::toArtworkPublicSummaryResponse)
+                .toList();
+    }
+
+    private Style convertStyleStringToEnum(String style) {
+        if (style == null) {
+            return null;
+        }
+        try {
+            return Style.valueOf(style.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid style name: " + style + ". Must be one of the defined style enums.");
+        }
     }
 }

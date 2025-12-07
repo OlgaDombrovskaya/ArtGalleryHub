@@ -10,5 +10,4 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByArtworkId(Long artworkId);
 
     List<Review> findByAuthorId(Long userId);
-//    List<Review> findByAuthor(Long authorId);
 }
