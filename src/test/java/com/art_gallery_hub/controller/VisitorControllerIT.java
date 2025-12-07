@@ -32,15 +32,28 @@ class VisitorControllerIT {
     }
 
     @Test
-    @DisplayName("GET /api/visitor/artworks — публичные работы для VISITOR, статус OK")
-    @Sql(scripts = {"classpath:sql/clear.sql", "classpath:sql/seed_artworks.sql"})
+    @DisplayName("GET /api/visitor/artworks — 2 публичные работы для VISITOR, статус OK")
+    @Sql(scripts = {"classpath:sql/clear.sql", "classpath:sql/seed_users.sql", "classpath:sql/seed_public_artworks.sql"})
     void shouldReturnArtworksForVisitor() {
+
+        TestRestTemplate visitorClient =
+                restTemplate.withBasicAuth("visitor1", "visitor123");
+
         ResponseEntity<Artwork[]> response =
-                restTemplate.getForEntity(url("/api/visitor/artworks"), Artwork[].class);
+                visitorClient.getForEntity(
+                        url("/api/visitor/artworks"),
+                        Artwork[].class
+                );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        List<Artwork> artworks = Arrays.asList(response.getBody());
+        Artwork[] body = response.getBody();
+        assertThat(body).isNotNull();
+
+        List<Artwork> artworks = Arrays.asList(body);
         assertThat(artworks.size()).isEqualTo(2);
+
+        assertThat(artworks.get(0).getTitle()).isEqualTo("Sunset");
+        assertThat(artworks.get(1).getTitle()).isEqualTo("Portrait");
     }
 }

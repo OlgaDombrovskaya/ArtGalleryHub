@@ -15,7 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -32,28 +32,49 @@ class AdminControllerIT {
     }
 
     @Test
-    @DisplayName("GET /api/admin/user — возвращает список пользователей, статус OK")
+    @DisplayName("GET /api/admin/users — возвращает список пользователей, статус OK для ADMIN")
     @Sql(scripts = {"classpath:sql/clear.sql", "classpath:sql/seed_users.sql"})
     void shouldReturnAllUsers() {
+        // КЛИЕНТ ПОД АДМИНОМ (логин/пароль — как в seed_users.sql)
+        TestRestTemplate adminClient =
+                restTemplate.withBasicAuth("admin1", "admin123");
+
         ResponseEntity<User[]> response =
-                restTemplate.getForEntity(url("/api/admin/user"), User[].class);
+                adminClient.getForEntity(url("/api/admin/users"), User[].class);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getStatusCode())
+                .isEqualTo(HttpStatus.OK);
 
-        List<User> users = Arrays.asList(response.getBody());
-        // тут просто пример проверки размера
-        assertThat(users.size()).isEqualTo(2);
+        User[] body = response.getBody();
+        assertThat(body).isNotNull();
+
+        List<User> users = Arrays.asList(body);
+
+        assertThat(users.size()).isEqualTo(4);
     }
 
     @Test
-    @DisplayName("GET /api/admin/user — нет пользователей, возвращается пустой список и статус OK")
+    @DisplayName("GET /api/admin/users — без авторизации: статус 401 UNAUTHORIZED")
     @Sql(scripts = {"classpath:sql/clear.sql"})
-    void shouldReturnEmptyListWhenNoUsers() {
-        ResponseEntity<User[]> response =
-                restTemplate.getForEntity(url("/api/admin/user"), User[].class);
+    void shouldReturnUnauthorizedWhenNoAuth() {
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        List<User> users = Arrays.asList(response.getBody());
-        assertThat(users.size()).isEqualTo(0);
+        ResponseEntity<String> response =
+                restTemplate.getForEntity(url("/api/admin/users"), String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    @DisplayName("GET /api/admin/users — VISITOR не имеет доступа, статус 401 (пока пользователь не находится)")
+    @Sql(scripts = {"classpath:sql/clear.sql", "classpath:sql/seed_users.sql"})
+    void testForbiddenForVisitor() {
+
+        TestRestTemplate visitorClient =
+                restTemplate.withBasicAuth("visitor1", "visitor123");
+
+        ResponseEntity<String> response =
+                visitorClient.getForEntity(url("/api/admin/users"), String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 }

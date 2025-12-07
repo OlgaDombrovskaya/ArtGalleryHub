@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class PasswordUtil {
     public static void main(String[] args) {
-        String hash = generateBCryptPassword("password");
+        String hash = generateBCryptPassword("visitor123");
         System.out.println(hash);
 
     }
