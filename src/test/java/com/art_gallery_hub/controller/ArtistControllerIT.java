@@ -1,8 +1,6 @@
 package com.art_gallery_hub.controller;
 
 import com.art_gallery_hub.model.Artwork;
-import com.art_gallery_hub.repository.RoleRepository;
-import com.art_gallery_hub.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,8 +10,11 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -25,17 +26,8 @@ class ArtistControllerIT {
     @LocalServerPort
     private int port;
 
-    // создала вручную т.к. @Autowired TestRestTemplate в версии 4.0 почему-то не работает
-    private final TestRestTemplate restTemplate = new TestRestTemplate();
-
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    TestRestTemplate restTemplate;
 
     private String url(String path) {
         return "http://localhost:" + port + path;
@@ -57,6 +49,11 @@ class ArtistControllerIT {
 
     @Test
     @DisplayName("GET /api/artist/artworks/my — с ролью ARTIST- 200 OK и JSON-список")
+    @Sql(scripts = {
+            "classpath:sql/clear.sql",
+            "classpath:sql/seed_users.sql",
+            "classpath:sql/seed_artworks.sql"
+    })
     void myArtworks_shouldReturnArtworksForArtist() {
         TestRestTemplate artistClient =
                 restTemplate.withBasicAuth("artist1", "artist123");
@@ -74,8 +71,8 @@ class ArtistControllerIT {
         Artwork[] body = response.getBody();
         assertThat(body).isNotNull();
 
-        assertThat(body.length)
-                .as("Список работ не должен быть null")
-                .isGreaterThanOrEqualTo(0);
+        List<Artwork> artworks = Arrays.asList(body);
+        assertThat(artworks.size()).isEqualTo(2);
+        assertThat(artworks.get(0).getTitle()).isEqualTo("Sunset");
     }
 }

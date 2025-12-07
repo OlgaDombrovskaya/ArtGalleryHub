@@ -10,6 +10,7 @@ import com.art_gallery_hub.model.User;
 import com.art_gallery_hub.repository.RoleRepository;
 import com.art_gallery_hub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -53,8 +55,9 @@ public class UserService {
 
     @Transactional
     public List<UserAdminSummaryResponse> getAllUsers() {
+        log.info("Fetching all users for admin view");
         List<User> users = userRepository.findAll();
-
+        log.info("Found {} users in system", users.size());
         return users.stream()
                 .map(user -> userMapper
                         .toUserAdminSummaryResponse(user))

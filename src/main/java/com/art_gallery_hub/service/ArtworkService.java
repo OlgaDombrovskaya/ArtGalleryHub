@@ -18,6 +18,7 @@ import com.art_gallery_hub.repository.ReviewRepository;
 import com.art_gallery_hub.repository.UserRepository;
 import com.art_gallery_hub.service.storage.LocalFileStorageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArtworkService {
@@ -63,6 +65,7 @@ public class ArtworkService {
     @Transactional
     public List<ArtworkPublicSummaryResponse> getAllArtworks() {
         List<Artwork> artworks = artworkRepository.findByIsPublicTrue();
+        log.info("Found {} public artworks", artworks.size());
 
         return artworks.stream()
                 .map(artwork -> artworkMapper.toArtworkPublicSummaryResponse(artwork))
@@ -73,6 +76,7 @@ public class ArtworkService {
     public ArtworkPublicDetailsResponse getArtworkDetails(Long artworkId) {
         Artwork artwork = findArtworkOrThrow(artworkId);
         List<Review> reviews = reviewRepository.findByArtworkId(artworkId);
+        log.info("Found {} reviews for artwork id={}", reviews.size(), artworkId);
 
         List<ReviewResponse> reviewResponses = reviews.stream()
                 .map(review -> reviewMapper.toReviewResponse(review))
