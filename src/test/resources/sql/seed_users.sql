@@ -1,9 +1,9 @@
 INSERT INTO roles (id, name)
 VALUES
-    (1, 'ADMIN'),
-    (2, 'ARTIST'),
-    (3, 'CURATOR'),
-    (4, 'VISITOR');
+    (1, 'ROLE_ADMIN'),
+    (2, 'ROLE_ARTIST'),
+    (3, 'ROLE_CURATOR'),
+    (4, 'ROLE_VISITOR');
 
 INSERT INTO users (id, username, email, password, enabled)
 VALUES

@@ -11,14 +11,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Sql(
-        scripts = {"/sql/clear.sql", "/sql/seed_users.sql"},
+        scripts = {"classpath:sql/clear.sql", "classpath:sql/seed_users.sql"},
         executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
 )
 class UserRepositoryIT {
@@ -30,14 +29,14 @@ class UserRepositoryIT {
     @DisplayName("findByUsername должен находить пользователя, вставленного через SQL")
     void findByUsername_shouldReturnUserFromSql() {
 
-        Optional<User> userOpt = userRepository.findByUsername("user1");
+        Optional<User> userOpt = userRepository.findByUsername("artist1");
 
         assertThat(userOpt)
-                .as("Пользователь user1 должен быть в БД после insert_test_users.sql")
+                .as("Пользователь artist1 должен быть в БД после seed_users.sql")
                 .isPresent();
 
         User user = userOpt.get();
-        assertThat(user.getEmail()).isEqualTo("user1@example.com");
+        assertThat(user.getEmail()).isEqualTo("artist1@example.com");
         assertThat(user.isEnabled()).isTrue();
     }
 
@@ -45,9 +44,9 @@ class UserRepositoryIT {
     @DisplayName("findByEmail должен находить пользователя по email")
     void findByEmail_shouldReturnUserFromSql() {
 
-        Optional<User> userOpt = userRepository.findByEmail("user2@example.com");
+        Optional<User> userOpt = userRepository.findByEmail("visitor1@example.com");
 
         assertThat(userOpt).isPresent();
-        assertThat(userOpt.get().getUsername()).isEqualTo("user2");
+        assertThat(userOpt.get().getUsername()).isEqualTo("visitor1");
     }
 }
