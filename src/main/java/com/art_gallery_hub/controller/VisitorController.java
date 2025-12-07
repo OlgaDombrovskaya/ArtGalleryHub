@@ -72,10 +72,4 @@ public class VisitorController {
     ) {
         return reviewService.getReviewsByArtworkId(id);
     }
-
-    // GET /api/visitor/artworks – список публичных работ для VISITOR
-    @GetMapping("/artworks")
-    public List<Artwork> getAvailableArtworks() {
-        return artworkRepository.findByIsPublicTrue();
-    }
 }

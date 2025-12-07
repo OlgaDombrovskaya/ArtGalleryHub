@@ -74,7 +74,7 @@ class PublicControllerTest {
                         "/images/portrait.jpg"
                 );
 
-        given(artworkService.getAllArtworks())
+        given(artworkService.getAllPublicArtworks())
                 .willReturn(List.of(artwork1, artwork2));
 
 
