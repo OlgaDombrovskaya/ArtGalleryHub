@@ -1,37 +1,50 @@
 package com.art_gallery_hub.controller;
 
-import com.art_gallery_hub.repository.ArtistProfileRepository;
-import com.art_gallery_hub.repository.ArtworkRepository;
-import com.art_gallery_hub.repository.UserRepository;
+import com.art_gallery_hub.config.SecurityConfig;
+import com.art_gallery_hub.service.ArtUserDetailsService;
+import com.art_gallery_hub.service.ArtistProfileService;
+import com.art_gallery_hub.service.ArtworkService;
+import com.art_gallery_hub.service.InvitationService;
+import com.art_gallery_hub.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-@WebMvcTest (controllers = ArtistController.class)
+@WebMvcTest(controllers = ArtistController.class)
+@Import(SecurityConfig.class)
 class ArtistControllerTest {
 
-        @Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private ArtistProfileRepository artistProfileRepository;
+    private ArtistProfileService artistProfileService;
 
     @MockitoBean
-    private ArtworkRepository artworkRepository;
+    private ArtworkService artworkService;
 
     @MockitoBean
-    private UserRepository userRepository; //нужен, потому что ArtistController в конструкторе принимает UserRepository
+    private InvitationService invitationService;
+
+    @MockitoBean
+    private UserService userService;
+
+    @MockitoBean
+    private ArtUserDetailsService artUserDetailsService;
 
     @Test
     @DisplayName("GET /api/artist/artworks/my — без авторизации 401 Unauthorized")
-    void shouldReturn401ArtworksMyWithoutAuth() throws Exception{
+    void shouldReturn401ArtworksMyWithoutAuth() throws Exception {
         mockMvc.perform(get("/api/artist/artworks/my"))
                 .andExpect(status().isUnauthorized());
     }
@@ -39,7 +52,7 @@ class ArtistControllerTest {
     @Test
     @DisplayName("GET /api/artist/artworks/my — авторизованный ARTIST получает 200 OK")
     @WithMockUser(username = "artist1", roles = "ARTIST")
-    void shouldReturn200ArtworksMyWithAuthArtist() throws Exception{
+    void shouldReturn200ArtworksMyWithAuthArtist() throws Exception {
         mockMvc.perform(get("/api/artist/artworks/my"))
                 .andExpect(status().isOk());
     }

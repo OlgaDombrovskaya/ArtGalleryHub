@@ -1,11 +1,17 @@
 package com.art_gallery_hub.controller;
 
-import com.art_gallery_hub.model.Artwork;
+import com.art_gallery_hub.config.SecurityConfig;
+import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
+import com.art_gallery_hub.enums.Style;
 import com.art_gallery_hub.repository.ArtworkRepository;
+import com.art_gallery_hub.service.ArtUserDetailsService;
+import com.art_gallery_hub.service.ArtworkService;
+import com.art_gallery_hub.service.ExhibitionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -18,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PublicController.class)
+@Import(SecurityConfig.class)
 class PublicControllerTest {
 
     @Autowired
@@ -25,6 +32,15 @@ class PublicControllerTest {
 
     @MockitoBean
     private ArtworkRepository artworkRepository;
+
+    @MockitoBean
+    private ArtworkService artworkService;
+
+    @MockitoBean
+    private ExhibitionService exhibitionService;
+
+    @MockitoBean
+    private ArtUserDetailsService artUserDetailsService;
 
     @Test
     @DisplayName("GET /api/public/info возвращает приветственное сообщение")
@@ -39,14 +55,28 @@ class PublicControllerTest {
     @Test
     @DisplayName("GET /api/public/artworks возвращает список 2-х публичных работ, статус OK")
     void testGetPublicArtworksSuccess() throws Exception {
-        Artwork artwork1 = new Artwork();
-        artwork1.setTitle("Sunset");
+        ArtworkPublicSummaryResponse artwork1 =
+                new ArtworkPublicSummaryResponse(1L,
+                        "artist1",
+                        "Sunset",
+                        2020,
+                        Style.ABSTRACT,
+                        "/images/sunset.jpg"
+                );
 
-        Artwork artwork2 = new Artwork();
-        artwork2.setTitle("Portrait");
+        ArtworkPublicSummaryResponse artwork2 =
+                new ArtworkPublicSummaryResponse(
+                        2L,
+                        "artist2",
+                        "Portrait",
+                        2021,
+                        Style.PORTRAIT,
+                        "/images/portrait.jpg"
+                );
 
-        given(artworkRepository.findByIsPublicTrue())
+        given(artworkService.getAllArtworks())
                 .willReturn(List.of(artwork1, artwork2));
+
 
         mockMvc.perform(get("/api/public/artworks"))
                 .andExpect(status().isOk())
@@ -65,5 +95,4 @@ class PublicControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(0));
     }
-
 }
