@@ -3,7 +3,6 @@ package com.art_gallery_hub.controller;
 import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
 import com.art_gallery_hub.dto.review.ReviewCreateRequest;
 import com.art_gallery_hub.dto.review.ReviewResponse;
-import com.art_gallery_hub.repository.ArtworkRepository;
 import com.art_gallery_hub.service.ArtworkService;
 import com.art_gallery_hub.service.ReviewService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,5 +71,11 @@ public class VisitorController {
             @PathVariable Long id
     ) {
         return reviewService.getReviewsByArtworkId(id);
+    }
+
+    // GET /api/visitor/artworks – список публичных работ для VISITOR
+    @GetMapping("/artworks")
+    public List<Artwork> getAvailableArtworks() {
+        return artworkRepository.findByIsPublicTrue();
     }
 }
