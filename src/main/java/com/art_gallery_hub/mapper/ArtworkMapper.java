@@ -1,8 +1,9 @@
 package com.art_gallery_hub.mapper;
 
-import com.art_gallery_hub.dto.ArtworkPublicDetailsResponse;
-import com.art_gallery_hub.dto.ArtworkPublicSummaryResponse;
-import com.art_gallery_hub.dto.ReviewResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkArtistResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkPublicDetailsResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
+import com.art_gallery_hub.dto.review.ReviewResponse;
 import com.art_gallery_hub.model.Artwork;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,21 @@ public class ArtworkMapper {
                 ),
                 artwork.getDescription(),
                 reviewResponses
+        );
+    }
+
+    public ArtworkArtistResponse toArtworkArtistResponse(Artwork artwork) {
+        return new ArtworkArtistResponse(
+                new ArtworkPublicSummaryResponse(
+                        artwork.getId(),
+                        artwork.getArtist().getDisplayName(),
+                        artwork.getTitle(),
+                        artwork.getYear(),
+                        artwork.getStyle(),
+                        artwork.getImagePath()
+                ),
+                artwork.getDescription(),
+                artwork.isPublic()
         );
     }
 }

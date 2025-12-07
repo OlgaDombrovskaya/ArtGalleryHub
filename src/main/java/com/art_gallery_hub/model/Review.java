@@ -24,12 +24,10 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artwork_id", nullable = false)
     private Artwork artwork;
 
-    // TODO
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
