@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public record ReviewResponse(
         Long id,
+        Long artworkId,
         String authorUsername,
         int rating,
         String comment,

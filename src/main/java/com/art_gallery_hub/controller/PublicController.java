@@ -35,13 +35,13 @@ public class PublicController {
     // GET /api/public/artworks – list of public works (IsPublic = true)
     @GetMapping("/artworks")
     public List<ArtworkPublicSummaryResponse> getPublicArtworks() {
-        return artworkService.getAllArtworks();
+        return artworkService.getAllPublicArtworks();
     }
 
     // GET /api/public/artworks/{id} - short information about the work (without hidden data)
     @GetMapping("/artworks/{id}")
     public ArtworkPublicDetailsResponse getArtworkById(@PathVariable Long id) {
-        return artworkService.getArtworkDetails(id);
+        return artworkService.getArtworkPublicDetails(id);
     }
 
     // GET /api/public/exhibitions – current and planned exhibitions (status = OPEN or PLANNED)

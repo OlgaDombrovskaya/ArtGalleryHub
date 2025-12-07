@@ -54,8 +54,8 @@ public class ArtistController {
     // PUT /api/artist/profile – edit your profile
     @PutMapping("/profile")
     public ResponseEntity<ArtistProfileResponse> updateMyProfile(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody ArtistProfileUpdateRequest artistProfileUpdateRequest
+            @RequestBody ArtistProfileUpdateRequest artistProfileUpdateRequest,
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
         ArtistProfileResponse response = artistProfileService.updateArtistProfile(
                 userDetails.getUsername(),
@@ -84,7 +84,7 @@ public class ArtistController {
     public List<ArtworkArtistResponse> getMyArtworks(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return artworkService.getArtworksPrivate(
+        return artworkService.getArtworksForArtist(
                 userDetails.getUsername());
     }
 

@@ -54,4 +54,20 @@ public class Artwork {
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp // Automatically sets the date at creation
     private LocalDateTime createdAt;
+
+    public Artwork(
+            ArtistProfile artist,
+            String title,
+            String description,
+            int year,
+            Style style,
+            String imagePath
+    ) {
+        this.artist = artist;
+        this.title = title;
+        this.description = description;
+        this.year = year;
+        this.style = style;
+        this.imagePath = imagePath;
+    }
 }
