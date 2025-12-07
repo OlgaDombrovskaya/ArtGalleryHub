@@ -116,7 +116,7 @@ public class ArtistController {
     public List<InvitationResponse> getMyInvitations(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return invitationService.getAllInvitations();
+        return invitationService.getAllInvitationsByArtist(userDetails.getUsername());
     }
 
     // POST /api/artist/invitations/{id}/accept – accept the invitation
