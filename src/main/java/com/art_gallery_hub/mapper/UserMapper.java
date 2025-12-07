@@ -1,13 +1,11 @@
 package com.art_gallery_hub.mapper;
 
-import com.art_gallery_hub.dto.user.UserRegistrationRequest;
 import com.art_gallery_hub.dto.user.UserAdminSummaryResponse;
 import com.art_gallery_hub.dto.user.UserRegistrationResponse;
 import com.art_gallery_hub.model.Role;
 import com.art_gallery_hub.model.User;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,16 +13,14 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     public User toEntity(
-            UserRegistrationRequest userRegistrationRequest,
+            String username,
+            String email,
             String encodedPassword,
-            Role role
+            Set<Role> roles
     ) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-
         return new User(
-                userRegistrationRequest.username(),
-                userRegistrationRequest.email(),
+                username,
+                email,
                 encodedPassword,
                 roles
         );

@@ -102,12 +102,11 @@ INSERT INTO invitations (id, exhibition_id, artist_profile_id, status, created_a
 VALUES (1, 1, 1, 'PENDING', NOW());
 
 ---------------------------------------------------------------
--- 10. Обновление счетчика ID для таблиц
-ALTER TABLE users ALTER COLUMN id RESTART WITH 5; -- (После 4 пользователей)
-ALTER TABLE roles ALTER COLUMN id RESTART WITH 5; -- (После 4 ролей)
-ALTER TABLE artist_profiles ALTER COLUMN id RESTART WITH 2; -- (После 1 профиля)
-ALTER TABLE artworks ALTER COLUMN id RESTART WITH 3; -- (После 2 произведений)
-ALTER TABLE reviews ALTER COLUMN id RESTART WITH 3; -- (После 2 отзывов)
-ALTER TABLE exhibitions ALTER COLUMN id RESTART WITH 2; -- (После 1 выставки)
-ALTER TABLE invitations ALTER COLUMN id RESTART WITH 2; -- (После 1 приглашения)
--- ... и так далее для всех таблиц с GENERATED AS IDENTITY
+-- 10. Updating the ID counter for tables
+ALTER TABLE users ALTER COLUMN id RESTART WITH 5; -- (After 4 users)
+ALTER TABLE roles ALTER COLUMN id RESTART WITH 5; -- (After 4 roles)
+ALTER TABLE artist_profiles ALTER COLUMN id RESTART WITH 2; -- (After 1 profile)
+ALTER TABLE artworks ALTER COLUMN id RESTART WITH 3; -- (After 2 artworks)
+ALTER TABLE reviews ALTER COLUMN id RESTART WITH 3; -- (After 2 reviews)
+ALTER TABLE exhibitions ALTER COLUMN id RESTART WITH 2; -- (After 1 exhibition)
+ALTER TABLE invitations ALTER COLUMN id RESTART WITH 2; -- (After 1 invitation)
