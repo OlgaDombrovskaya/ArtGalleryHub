@@ -1,8 +1,12 @@
 package com.art_gallery_hub.controller;
 
+import com.art_gallery_hub.config.SecurityConfig;
 import com.art_gallery_hub.repository.ArtworkRepository;
+import com.art_gallery_hub.service.ArtUserDetailsService;
+import com.art_gallery_hub.service.CuratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import com.art_gallery_hub.model.Artwork;
@@ -18,43 +22,51 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-    @WebMvcTest(controllers = VisitorController.class)
-    class VisitorControllerTest {
+@WebMvcTest(controllers = VisitorController.class)
+@Import(SecurityConfig.class)
+class VisitorControllerTest {
 
-        @Autowired
-        private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-        @MockitoBean
-        private ArtworkRepository artworkRepository;
+    @MockitoBean
+    private ArtworkRepository artworkRepository;
 
-        @Test
-        @DisplayName("GET /api/visitor/artworks возвращает список публичных работ для VISITOR, статус OK")
-        @WithMockUser(username = "visitor1", roles = "VISITOR")
-        void testGetAvailableArtworksSuccess() throws Exception {
-            Artwork artwork1 = new Artwork();
-            artwork1.setTitle("Street Art");
+    @MockitoBean
+    private CuratorService curatorService;
 
-            Artwork artwork2 = new Artwork();
-            artwork2.setTitle("Minimalism");
+    @MockitoBean
+    private ArtUserDetailsService artUserDetailsService;
 
-            given(artworkRepository.findByIsPublicTrue())
-                    .willReturn(List.of(artwork1, artwork2));
+    @Test
+    @DisplayName("GET /api/visitor/artworks возвращает список публичных работ для VISITOR, статус OK")
+    @WithMockUser(username = "visitor1", roles = "VISITOR")
+    void testGetAvailableArtworksSuccess() throws Exception {
+        Artwork artwork1 = new Artwork();
+        artwork1.setTitle("Street Art");
 
-            mockMvc.perform(get("/api/visitor/artworks"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.length()").value(2))
-                    .andExpect(jsonPath("$[?(@.title == 'Street Art')]").exists())
-                    .andExpect(jsonPath("$[?(@.title == 'Minimalism')]").exists());
-        }
-        @Test
-        @DisplayName("GET /api/visitor/artworks — нет работ, статус OK, пустой список")
-        @WithMockUser(username = "visitor1", roles = "VISITOR")
-        void testGetAvailableArtworksEmpty() throws Exception {
-            given(artworkRepository.findByIsPublicTrue())
-                    .willReturn(List.of());
+        Artwork artwork2 = new Artwork();
+        artwork2.setTitle("Minimalism");
 
-            mockMvc.perform(get("/api/visitor/artworks"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.length()").value(0));
-        }
+        given(artworkRepository.findByIsPublicTrue())
+                .willReturn(List.of(artwork1, artwork2));
+
+        mockMvc.perform(get("/api/visitor/artworks"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[?(@.title == 'Street Art')]").exists())
+                .andExpect(jsonPath("$[?(@.title == 'Minimalism')]").exists());
     }
+
+    @Test
+    @DisplayName("GET /api/visitor/artworks — нет работ, статус OK, пустой список")
+    @WithMockUser(username = "visitor1", roles = "VISITOR")
+    void testGetAvailableArtworksEmpty() throws Exception {
+        given(artworkRepository.findByIsPublicTrue())
+                .willReturn(List.of());
+
+        mockMvc.perform(get("/api/visitor/artworks"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+}
