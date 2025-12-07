@@ -27,7 +27,6 @@ public class Artwork {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_profile_id", nullable = false)
     private ArtistProfile artist;

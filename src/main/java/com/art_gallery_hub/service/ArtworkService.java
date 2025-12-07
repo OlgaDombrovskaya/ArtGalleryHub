@@ -1,9 +1,10 @@
 package com.art_gallery_hub.service;
 
 import com.art_gallery_hub.dto.artwork.ArtworkCreateRequest;
-import com.art_gallery_hub.dto.artwork.ArtworkPrivateResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkArtistResponse;
 import com.art_gallery_hub.dto.artwork.ArtworkPublicDetailsResponse;
 import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkUpdateRequest;
 import com.art_gallery_hub.dto.review.ReviewResponse;
 import com.art_gallery_hub.mapper.ArtworkMapper;
 import com.art_gallery_hub.mapper.ReviewMapper;
@@ -18,7 +19,6 @@ import com.art_gallery_hub.repository.UserRepository;
 import com.art_gallery_hub.service.storage.LocalFileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,9 +53,15 @@ public class ArtworkService {
                         "Artist Profile not found with user ID: " + userId));
     }
 
+    private Artwork findArtworkOrThrow(Long artworkId) {
+        return artworkRepository.findById(artworkId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Artwork not found with ID: " + artworkId));
+    }
+
     @Transactional
     public List<ArtworkPublicSummaryResponse> getAllArtworks() {
-
         List<Artwork> artworks = artworkRepository.findByIsPublicTrue();
 
         return artworks.stream()
@@ -65,11 +71,7 @@ public class ArtworkService {
 
     @Transactional
     public ArtworkPublicDetailsResponse getArtworkDetails(Long artworkId) {
-        Artwork artwork = artworkRepository.findById(artworkId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Artwork not found with ID: " + artworkId));
-
+        Artwork artwork = findArtworkOrThrow(artworkId);
         List<Review> reviews = reviewRepository.findByArtworkId(artworkId);
 
         List<ReviewResponse> reviewResponses = reviews.stream()
@@ -80,7 +82,7 @@ public class ArtworkService {
     }
 
     @Transactional
-    public ArtworkPublicSummaryResponse createArtwork(
+    public ArtworkArtistResponse createArtwork(
             ArtworkCreateRequest request,
             MultipartFile imageFile,
             String username
@@ -105,23 +107,43 @@ public class ArtworkService {
 
         Artwork savedArtwork = artworkRepository.save(newArtwork);
 
-        return artworkMapper.toArtworkPublicSummaryResponse(savedArtwork);
+        return artworkMapper.toArtworkArtistResponse(savedArtwork);
     }
 
     @Transactional
-    public List<ArtworkPrivateResponse> getArtworksPrivate(String username) {
+    public List<ArtworkArtistResponse> getArtworksPrivate(String username) {
         User user = findUserOrThrow(username);
         ArtistProfile artistProfile = findProfileOrThrow(user.getId());
 
         List<Artwork> artworks = artworkRepository.findByArtistId(artistProfile.getId());
 
         return artworks.stream()
-                .map(artwork -> artworkMapper.toArtworkPrivateResponse(artwork))
+                .map(artwork -> artworkMapper.toArtworkArtistResponse(artwork))
                 .toList();
     }
 
-    @PreAuthorize("#artwork.artist.user.username == authentication.name or hasRole('ADMIN')")
-    public Artwork updateArtwork(Artwork artwork) {
-        return artwork;
+    @Transactional
+    public ArtworkArtistResponse updateArtwork(
+            Long artworkId,
+            ArtworkUpdateRequest request
+    ) {
+        Artwork artwork = findArtworkOrThrow(artworkId);
+
+        artwork.setTitle(request.title());
+        artwork.setDescription(request.description());
+        artwork.setYear(request.year());
+        artwork.setStyle(request.style());
+        artwork.setPublic(request.isPublic());
+
+        Artwork updatedArtwork = artworkRepository.save(artwork);
+
+        return artworkMapper.toArtworkArtistResponse(updatedArtwork);
+    }
+
+    @Transactional
+    public void deleteArtwork(Long artworkId) {
+        Artwork artwork = findArtworkOrThrow(artworkId);
+
+        artworkRepository.delete(artwork);
     }
 }

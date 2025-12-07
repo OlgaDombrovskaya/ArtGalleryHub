@@ -37,7 +37,6 @@ public class User {
     @Column(nullable = false)
     private boolean enabled = true;
 
-    // TODO
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -46,7 +45,6 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    // TODO
     public User(
             String username,
             String password,

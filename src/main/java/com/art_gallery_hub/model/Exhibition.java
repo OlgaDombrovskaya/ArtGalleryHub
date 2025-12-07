@@ -42,7 +42,6 @@ public class Exhibition {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    // TODO
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curator_id", nullable = false)
     private User curator;
@@ -52,7 +51,6 @@ public class Exhibition {
     // (for example, "IMPRESSIONISM") as a string, not a number (index)
     private ExhibitionStatus status;
 
-    // TODO
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "exhibition_artworks",

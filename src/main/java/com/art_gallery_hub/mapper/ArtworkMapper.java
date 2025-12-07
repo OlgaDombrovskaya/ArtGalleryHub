@@ -1,7 +1,6 @@
 package com.art_gallery_hub.mapper;
 
-import com.art_gallery_hub.dto.artwork.ArtworkCreateRequest;
-import com.art_gallery_hub.dto.artwork.ArtworkPrivateResponse;
+import com.art_gallery_hub.dto.artwork.ArtworkArtistResponse;
 import com.art_gallery_hub.dto.artwork.ArtworkPublicDetailsResponse;
 import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
 import com.art_gallery_hub.dto.review.ReviewResponse;
@@ -41,17 +40,8 @@ public class ArtworkMapper {
         );
     }
 
-    public ArtworkCreateRequest toArtworkCreateRequest(Artwork artwork) {
-        return new ArtworkCreateRequest(
-                artwork.getTitle(),
-                artwork.getDescription(),
-                artwork.getYear(),
-                artwork.getStyle()
-        );
-    }
-
-    public ArtworkPrivateResponse toArtworkPrivateResponse(Artwork artwork) {
-        return new ArtworkPrivateResponse(
+    public ArtworkArtistResponse toArtworkArtistResponse(Artwork artwork) {
+        return new ArtworkArtistResponse(
                 new ArtworkPublicSummaryResponse(
                         artwork.getId(),
                         artwork.getArtist().getDisplayName(),

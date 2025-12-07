@@ -1,6 +1,6 @@
 package com.art_gallery_hub.dto.artwork;
 
-public record ArtworkPrivateResponse(
+public record ArtworkArtistResponse(
         ArtworkPublicSummaryResponse summary,
         String description,
         boolean isPublic
