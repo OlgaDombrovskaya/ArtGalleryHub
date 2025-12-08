@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <!-- Папка для логов -->
+    <property name="LOG_PATH" value="./logs"/>
+
+    <!-- Уровень логирования по умолчанию -->
+    <property name="LOG_LEVEL" value="INFO"/>
+
+    <!-- Консольный аппендер -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Файловый аппендер (с ежедневной ротацией) -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/app.log</file>
+
+        <!-- Политика ротации: каждый день новый файл -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory> <!-- хранить 7 дней -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{40} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Логгеры для пакетов -->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="de.ait" level="DEBUG"/>
+
+    <!-- Корневой логгер -->
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

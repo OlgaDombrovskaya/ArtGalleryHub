@@ -4,6 +4,7 @@ import com.art_gallery_hub.config.SecurityConfig;
 import com.art_gallery_hub.repository.ExhibitionRepository;
 import com.art_gallery_hub.repository.UserRepository;
 import com.art_gallery_hub.service.ArtUserDetailsService;
+import com.art_gallery_hub.service.ExhibitionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ class CuratorControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private ExhibitionService exhibitionService;
 
     @MockitoBean
     private ExhibitionRepository exhibitionRepository;
