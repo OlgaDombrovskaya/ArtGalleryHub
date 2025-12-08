@@ -58,4 +58,17 @@ public class Exhibition {
             inverseJoinColumns = @JoinColumn(name = "artwork_id")
     )
     private Set<Artwork> artworks = new HashSet<>();
+
+    public void addArtwork(Artwork artwork) {
+        this.artworks.add(artwork);
+    }
+
+    public Exhibition(String title, String description, LocalDate startDate, LocalDate endDate, User curator, ExhibitionStatus status) {
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.curator = curator;
+        this.status = status;
+    }
 }
