@@ -1,6 +1,5 @@
 package com.art_gallery_hub.controller;
 
-import com.art_gallery_hub.dto.exhibition.ExhibitionSummaryResponse;
 import com.art_gallery_hub.enums.ExhibitionStatus;
 import com.art_gallery_hub.model.Exhibition;
 import com.art_gallery_hub.repository.ExhibitionRepository;
