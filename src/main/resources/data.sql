@@ -15,22 +15,22 @@ VALUES (4, 'ROLE_VISITOR');
 -- ID 1
 INSERT INTO users (id, username, email, password, enabled)
 VALUES (1, 'admin', 'admin@gallery.com',
-        '$2a$10$U.SOxlQMmMOINghKcfZf..mPLYkMnQ/K/DeV6KxtyaeX3LkfdaI7.', TRUE);
+        '$2a$10$C5khr6yG2xKrazB7QeYTlenxMz.8wMRFGLmAC.YLp0jvtUGITTy1.', TRUE);
 
 -- ID 2
 INSERT INTO users (id, username, email, password, enabled)
 VALUES (2, 'curator', 'curator@gallery.com',
-        '$2a$10$uFipVPZBodrZ7erPxwwZOugW0Pm7/5q2Sr1r0VY0ijkJ5.Ts.Nhve', TRUE);
+        '$2a$10$/hsR9hylJd/JQVcVEfUSFeIYO/oms1x4Pbv7fQmykovoZ4aSDI./6', TRUE);
 
 -- ID 3
 INSERT INTO users (id, username, email, password, enabled)
 VALUES (3, 'artist', 'artist@gallery.com',
-        '$2a$10$3o1X4iu2LhtTyHC4TfhPI.6gHUsRx7vOwS9uVZ.y8ni197Bi2sK0m', TRUE);
+        '$2a$10$KpsvqXSM4MXNiZcTgQeC4em8FKXskKSas8I2fhkoDngZsavYmTQDW', TRUE);
 
 -- ID 4
 INSERT INTO users (id, username, email, password, enabled)
 VALUES (4, 'visitor', 'visitor@gallery.com',
-        '$2a$10$vaOXRnDMK4aTD7TOBh8ld.VLY/8zqucC7htYtDOTq26Sfla5ffpT6', TRUE);
+        '$2a$10$sm.UiZYubFoygsCR7tKicuKSFrBE9pqsgdLPEU72oJEqvqo5aa7LS', TRUE);
 
 --- 3. Insert USER_ROLES (1.2.3)
 -- admin (ID 1) -> ADMIN (ID 1)

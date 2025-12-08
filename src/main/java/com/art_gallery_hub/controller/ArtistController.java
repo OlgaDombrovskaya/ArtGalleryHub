@@ -5,7 +5,7 @@ import com.art_gallery_hub.dto.artist_profile.ArtistProfileUpdateRequest;
 import com.art_gallery_hub.dto.artwork.ArtworkCreateRequest;
 import com.art_gallery_hub.dto.artwork.ArtworkArtistResponse;
 import com.art_gallery_hub.dto.artwork.ArtworkUpdateRequest;
-import com.art_gallery_hub.dto.invitation.InvitationResponse;
+import com.art_gallery_hub.dto.invitation.InvitationArtistResponse;
 import com.art_gallery_hub.service.ArtistProfileService;
 import com.art_gallery_hub.service.ArtworkService;
 import com.art_gallery_hub.service.InvitationService;
@@ -113,7 +113,7 @@ public class ArtistController {
 
     // GET /api/artist/invitations – list of invitations to exhibitions
     @GetMapping("/invitations")
-    public List<InvitationResponse> getMyInvitations(
+    public List<InvitationArtistResponse> getMyInvitations(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         return invitationService.getAllInvitationsByArtist(userDetails.getUsername());
@@ -123,10 +123,10 @@ public class ArtistController {
     // acceptInvitation
     @PreAuthorize("@invitationAccessChecker.isOwner(#id, authentication) or hasRole('ADMIN')")
     @PostMapping("/invitations/{id}/accept")
-    public ResponseEntity<InvitationResponse> acceptMyInvitation(
+    public ResponseEntity<InvitationArtistResponse> acceptMyInvitation(
             @PathVariable Long id
     ) {
-        InvitationResponse response = invitationService.acceptInvitation(id);
+        InvitationArtistResponse response = invitationService.acceptInvitation(id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -134,10 +134,10 @@ public class ArtistController {
     // POST /api/artist/invitations/{id}/decline – decline
     @PreAuthorize("@invitationAccessChecker.isOwner(#id, authentication) or hasRole('ADMIN')")
     @PostMapping("/invitations/{id}/decline")
-    public ResponseEntity<InvitationResponse> declineMyInvitation(
+    public ResponseEntity<InvitationArtistResponse> declineMyInvitation(
             @PathVariable Long id
     ) {
-        InvitationResponse response = invitationService.declineInvitation(id);
+        InvitationArtistResponse response = invitationService.declineInvitation(id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

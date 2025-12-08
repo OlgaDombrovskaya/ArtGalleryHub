@@ -1,6 +1,6 @@
 package com.art_gallery_hub.service;
 
-import com.art_gallery_hub.dto.invitation.InvitationResponse;
+import com.art_gallery_hub.dto.invitation.InvitationArtistResponse;
 import com.art_gallery_hub.enums.InvitationStatus;
 import com.art_gallery_hub.mapper.InvitationMapper;
 import com.art_gallery_hub.model.ArtistProfile;
@@ -48,19 +48,19 @@ public class InvitationService {
     }
 
     @Transactional
-    public List<InvitationResponse> getAllInvitationsByArtist(String username) {
+    public List<InvitationArtistResponse> getAllInvitationsByArtist(String username) {
         User user = findUserOrThrow(username);
         ArtistProfile artistProfile = findProfileOrThrow(user.getId());
 
         List<Invitation> invitations = invitationRepository.findByArtistId(artistProfile.getId());
 
         return invitations.stream()
-                .map(response -> invitationMapper.toInvitationResponse(response))
+                .map(invitationMapper::toInvitationArtistResponse)
                 .toList();
     }
 
     @Transactional
-    public InvitationResponse acceptInvitation(Long invitationId) {
+    public InvitationArtistResponse acceptInvitation(Long invitationId) {
         Invitation invitation = findInvitationOrThrow(invitationId);
 
         if (invitation.getStatus() == InvitationStatus.ACCEPTED) {
@@ -72,11 +72,11 @@ public class InvitationService {
 
         Invitation acceptedInvitation = invitationRepository.save(invitation);
 
-        return invitationMapper.toInvitationResponse(acceptedInvitation);
+        return invitationMapper.toInvitationArtistResponse(acceptedInvitation);
     }
 
     @Transactional
-    public InvitationResponse declineInvitation(Long invitationId) {
+    public InvitationArtistResponse declineInvitation(Long invitationId) {
         Invitation invitation = findInvitationOrThrow(invitationId);
 
         if (invitation.getStatus() == InvitationStatus.DECLINED) {
@@ -88,7 +88,7 @@ public class InvitationService {
 
         Invitation declinedInvitation = invitationRepository.save(invitation);
 
-        return invitationMapper.toInvitationResponse(declinedInvitation);
+        return invitationMapper.toInvitationArtistResponse(declinedInvitation);
     }
 
 }

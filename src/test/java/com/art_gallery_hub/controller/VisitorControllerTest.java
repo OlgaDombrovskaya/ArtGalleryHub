@@ -3,7 +3,6 @@ package com.art_gallery_hub.controller;
 import com.art_gallery_hub.config.SecurityConfig;
 import com.art_gallery_hub.repository.ArtworkRepository;
 import com.art_gallery_hub.service.ArtUserDetailsService;
-import com.art_gallery_hub.service.CuratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -31,9 +30,6 @@ class VisitorControllerTest {
 
     @MockitoBean
     private ArtworkRepository artworkRepository;
-
-    @MockitoBean
-    private CuratorService curatorService;
 
     @MockitoBean
     private ArtUserDetailsService artUserDetailsService;

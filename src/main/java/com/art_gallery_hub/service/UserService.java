@@ -100,8 +100,7 @@ public class UserService {
         List<User> users = userRepository.findAll();
         log.info("Found {} users in system", users.size());
         return users.stream()
-                .map(user -> userMapper
-                        .toUserAdminSummaryResponse(user))
+                .map(userMapper::toUserAdminSummaryResponse)
                 .toList();
     }
 
