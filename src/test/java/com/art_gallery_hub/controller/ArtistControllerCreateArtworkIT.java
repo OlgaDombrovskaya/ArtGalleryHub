@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class ArtistControllerCreateArtworkIT {
 
     @Autowired
@@ -42,9 +44,8 @@ class ArtistControllerCreateArtworkIT {
     @Sql(scripts = {
             "classpath:sql/clear.sql",
             "classpath:sql/seed_users.sql",
-            // если есть скрипт с профилями художников — добавь и его:
-            // "classpath:sql/seed_artist_profiles.sql",
-            "classpath:sql/seed_public_artworks.sql"
+             "classpath:sql/seed_artist_profiles.sql",
+//            "classpath:sql/seed_public_artworks.sql"
     })
     @WithMockUser(username = "artist1", roles = "ARTIST")
     void createArtwork_multipart_savesToDb() throws Exception {
@@ -63,7 +64,7 @@ class ArtistControllerCreateArtworkIT {
 
         // part "artwork" -> @RequestPart("artwork")
         MockMultipartFile artworkPart = new MockMultipartFile(
-                "artwork",              // имя part — как в контроллере
+                "artwork",
                 "artwork.json",
                 APPLICATION_JSON_VALUE,
                 json.getBytes(StandardCharsets.UTF_8)
@@ -74,7 +75,7 @@ class ArtistControllerCreateArtworkIT {
                 "image",
                 "test.png",
                 "image/png",
-                new byte[0]
+                "fake-image-content".getBytes(StandardCharsets.UTF_8)
         );
 
         // отправляем multipart POST на /api/artist/artworks

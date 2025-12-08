@@ -1,18 +1,19 @@
 package com.art_gallery_hub.controller;
 
 import com.art_gallery_hub.config.SecurityConfig;
-import com.art_gallery_hub.repository.ArtworkRepository;
+import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
+import com.art_gallery_hub.enums.Style;
 import com.art_gallery_hub.service.ArtUserDetailsService;
+import com.art_gallery_hub.service.ArtworkService;
+import com.art_gallery_hub.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import com.art_gallery_hub.model.Artwork;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
-
 
 import java.util.List;
 
@@ -29,7 +30,10 @@ class VisitorControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private ArtworkRepository artworkRepository;
+    private ArtworkService artworkService;
+
+    @MockitoBean
+    private ReviewService reviewService;
 
     @MockitoBean
     private ArtUserDetailsService artUserDetailsService;
@@ -38,14 +42,27 @@ class VisitorControllerTest {
     @DisplayName("GET /api/visitor/artworks возвращает список публичных работ для VISITOR, статус OK")
     @WithMockUser(username = "visitor1", roles = "VISITOR")
     void testGetAvailableArtworksSuccess() throws Exception {
-        Artwork artwork1 = new Artwork();
-        artwork1.setTitle("Street Art");
+        ArtworkPublicSummaryResponse artwork1 = new ArtworkPublicSummaryResponse(
+                1L,
+                "Artist One",
+                "Street Art",
+                2020,
+                Style.PHOTOGRAPHY,
+                "/images/street_art.jpg"
+        );
 
-        Artwork artwork2 = new Artwork();
-        artwork2.setTitle("Minimalism");
+        ArtworkPublicSummaryResponse artwork2 = new ArtworkPublicSummaryResponse(
+                2L,
+                "Artist Two",
+                "Minimalism",
+                2021,
+                Style.MINIMALISM,
+                "/images/minimalism.jpg"
+        );
 
-        given(artworkRepository.findByIsPublicTrue())
+        given(artworkService.getAllPublicArtworksWithFilter(null, null, null))
                 .willReturn(List.of(artwork1, artwork2));
+
 
         mockMvc.perform(get("/api/visitor/artworks"))
                 .andExpect(status().isOk())
@@ -58,7 +75,7 @@ class VisitorControllerTest {
     @DisplayName("GET /api/visitor/artworks — нет работ, статус OK, пустой список")
     @WithMockUser(username = "visitor1", roles = "VISITOR")
     void testGetAvailableArtworksEmpty() throws Exception {
-        given(artworkRepository.findByIsPublicTrue())
+        given(artworkService.getAllPublicArtworks())
                 .willReturn(List.of());
 
         mockMvc.perform(get("/api/visitor/artworks"))

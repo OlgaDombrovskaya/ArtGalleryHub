@@ -1,6 +1,8 @@
 package com.art_gallery_hub.controller;
 
-import com.art_gallery_hub.dto.exhibition.ExhibitionSummaryResponse;
+import com.art_gallery_hub.dto.exhibition.ExhibitionCreateOrUpdateRequest;
+import com.art_gallery_hub.dto.exhibition.ExhibitionCuratorSummaryResponse;
+import com.art_gallery_hub.dto.exhibition.ExhibitionStatusUpdateRequest;
 import com.art_gallery_hub.enums.ExhibitionStatus;
 import com.art_gallery_hub.model.Exhibition;
 import com.art_gallery_hub.repository.ExhibitionRepository;
@@ -22,10 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -60,19 +59,19 @@ class CuratorControllerIT {
     @Sql(scripts = {"classpath:sql/clear.sql", "classpath:sql/seed_users.sql"})
     void shouldReturnEmptyListForCurator() {
 
-        ResponseEntity<Exhibition[]> response =
+        ResponseEntity<ExhibitionCuratorSummaryResponse[]> response =
                 restTemplate.withBasicAuth
-                        ("curator1", "curator123")
+                                ("curator1", "curator123")
                         .getForEntity(url("/api/curator/exhibitions/my"),
-                        Exhibition[].class
-                );
+                                ExhibitionCuratorSummaryResponse[].class
+                        );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        Exhibition[] body = response.getBody();
+        ExhibitionCuratorSummaryResponse[] body = response.getBody();
         assertThat(body).isNotNull();
 
-        List<Exhibition> exhibitions = Arrays.asList(body);
+        List<ExhibitionCuratorSummaryResponse> exhibitions = Arrays.asList(body);
         assertThat(exhibitions).isEmpty();
     }
 
@@ -83,45 +82,45 @@ class CuratorControllerIT {
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.setContentType(MediaType.APPLICATION_JSON);
 //
-//        ExhibitionSummaryResponse createRequest = new ExhibitionSummaryResponse(
+//        ExhibitionCreateOrUpdateRequest createRequest = new ExhibitionCreateOrUpdateRequest(
 //                "New Exhibition",
 //                "About modern art",
 //                LocalDate.of(2025, 1, 1),
 //                LocalDate.of(2025, 1, 31)
 //        );
-//        HttpEntity<ExhibitionSummaryResponse> createHttpEntity =
+//        HttpEntity<ExhibitionCreateOrUpdateRequest> createHttpEntity =
 //                new HttpEntity<>(createRequest, headers);
 //
-//        ResponseEntity<ExhibitionSummaryResponse> createResponse =
+//        ResponseEntity<ExhibitionCuratorSummaryResponse> createResponse =
 //                restTemplate.withBasicAuth("curator1", "curator123")
 //                        .exchange(
 //                                url("/api/curator/exhibitions"),
 //                                HttpMethod.POST,
 //                                createHttpEntity,
-//                                ExhibitionSummaryResponse.class
+//                                ExhibitionCuratorSummaryResponse.class
 //                        );
 //
 //        assertThat(createResponse.getStatusCode())
 //                .as("Ожидаем 201 CREATED при создании выставки")
 //                .isEqualTo(HttpStatus.CREATED);
 //
-//        ExhibitionSummaryResponse created = createResponse.getBody();
+//        ExhibitionCuratorSummaryResponse created = createResponse.getBody();
 //        assertThat(created).isNotNull();
 //        Long exhibitionId = created.id();
 //        assertThat(exhibitionId).isNotNull();
 //
 //        // 2. Меняем статус на OPEN
-//        ExhibitionSummaryResponse statusRequest =
-//                new ExhibitionSummaryResponse("OPEN");
+//        ExhibitionStatusUpdateRequest statusRequest =
+//                new ExhibitionStatusUpdateRequest(ExhibitionStatus.OPEN);
 //
-//        HttpEntity<ExhibitionSummaryResponse> statusHttpEntity =
+//        HttpEntity<ExhibitionStatusUpdateRequest> statusHttpEntity =
 //                new HttpEntity<>(statusRequest, headers);
 //
 //        ResponseEntity<Void> statusResponse =
 //                restTemplate.withBasicAuth("curator1", "curator123")
 //                        .exchange(
 //                                url("/api/curator/exhibitions/" + exhibitionId + "/status"),
-//                                HttpMethod.POST,
+//                                HttpMethod.PATCH,
 //                                statusHttpEntity,
 //                                Void.class
 //                        );
