@@ -42,7 +42,7 @@
             <column name="username" value="admin"/>
             <column name="email" value="admin@gallery.com"/>
             <column name="password"
-                    value="$2a$10$U.SOxlQMmMOINghKcfZf..mPLYkMnQ/K/DeV6KxtyaeX3LkfdaI7."/>
+                    value="$2a$10$C5khr6yG2xKrazB7QeYTlenxMz.8wMRFGLmAC.YLp0jvtUGITTy1."/>
             <column name="enabled" valueBoolean="true"/>
         </insert>
         <!--user curator-->
@@ -50,7 +50,7 @@
             <column name="username" value="curator"/>
             <column name="email" value="curator@gallery.com"/>
             <column name="password"
-                    value="$2a$10$uFipVPZBodrZ7erPxwwZOugW0Pm7/5q2Sr1r0VY0ijkJ5.Ts.Nhve"/>
+                    value="$2a$10$/hsR9hylJd/JQVcVEfUSFeIYO/oms1x4Pbv7fQmykovoZ4aSDI./6"/>
             <column name="enabled" valueBoolean="true"/>
         </insert>
         <!--user artist-->
@@ -58,7 +58,7 @@
             <column name="username" value="artist"/>
             <column name="email" value="artist@gallery.com"/>
             <column name="password"
-                    value="$2a$10$3o1X4iu2LhtTyHC4TfhPI.6gHUsRx7vOwS9uVZ.y8ni197Bi2sK0m"/>
+                    value="$2a$10$KpsvqXSM4MXNiZcTgQeC4em8FKXskKSas8I2fhkoDngZsavYmTQDW"/>
             <column name="enabled" valueBoolean="true"/>
         </insert>
         <!--user visitor-->
@@ -66,7 +66,7 @@
             <column name="username" value="visitor"/>
             <column name="email" value="visitor@gallery.com"/>
             <column name="password"
-                    value="$2a$10$vaOXRnDMK4aTD7TOBh8ld.VLY/8zqucC7htYtDOTq26Sfla5ffpT6"/>
+                    value="$2a$10$sm.UiZYubFoygsCR7tKicuKSFrBE9pqsgdLPEU72oJEqvqo5aa7LS"/>
             <column name="enabled" valueBoolean="true"/>
         </insert>
 
