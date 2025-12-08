@@ -40,26 +40,57 @@ class AdminControllerIT {
                         ("admin1", "admin123")
                 .getForEntity(url("/api/admin/users"), UserAdminSummaryResponse[].class);
 
-//        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         List<UserAdminSummaryResponse> users = Arrays.asList(response.getBody());
         assertThat(users.size()).isEqualTo(4);
         assertThat(users.get(0).username()).isEqualTo("admin1");
     }
+//TODO
+    // этот вариант нужен только
+    //если не отключаем в SecutityConfig   http.formLogin(Customizer.withDefaults());
+
+//    @Test
+//    @DisplayName("GET /api/admin/users — без авторизации происходит редирект на страницу логина")
+//    @Sql(scripts = {"classpath:sql/clear.sql"})
+//    void shouldReturnUnauthorizedWhenNoAuth() {
+//
+//        ResponseEntity<String> response =
+//                restTemplate.getForEntity(url("/api/admin/users"), String.class);
+//
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        assertThat(response.getBody())
+//                .containsIgnoringCase("login");
+//    }
 
     @Test
-    @DisplayName("GET /api/admin/users — без авторизации происходит редирект на страницу логина")
+    @DisplayName("GET /api/admin/users — без авторизации возвращает статус 401/403")
     @Sql(scripts = {"classpath:sql/clear.sql"})
-    void shouldReturnUnauthorizedWhenNoAuth() {
+    void shouldReturnUnauthorizedWhenNoAuthWithAdmin() {
 
         ResponseEntity<String> response =
-                restTemplate.getForEntity(url("/api/admin/users"), String.class);
+                restTemplate.getForEntity(
+                        url("/api/admin/users"),
+                        String.class
+                );
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody())
-                .containsIgnoringCase("login");
+        assertThat(response.getStatusCode())
+                .isIn(HttpStatus.UNAUTHORIZED, HttpStatus.FORBIDDEN);
     }
+
+    @Test
+    @DisplayName("GET /api/artist/artworks/my — без авторизации возвращает статус 401/403")
+    void myArtworks_shouldReturnUnauthorizedWithoutAuth() {
+        ResponseEntity<String> response =
+                restTemplate.getForEntity(
+                        url("/api/artist/artworks/my"),
+                        String.class
+                );
+
+        assertThat(response.getStatusCode())
+                .isIn(HttpStatus.UNAUTHORIZED, HttpStatus.FORBIDDEN);
+    }
+
 
     @Test
     @DisplayName("GET /api/admin/users — VISITOR не имеет доступа, статус 403 (пока пользователь не находится)")

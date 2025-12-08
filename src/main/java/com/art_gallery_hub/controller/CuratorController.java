@@ -26,4 +26,6 @@ public class CuratorController {
     public List<Exhibition> getMyExhibitions(@AuthenticationPrincipal UserDetails userDetails) {
         return List.of();
     }
+
+
 }

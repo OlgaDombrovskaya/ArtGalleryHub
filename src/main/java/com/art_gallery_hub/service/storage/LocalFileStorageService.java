@@ -1,5 +1,6 @@
 package com.art_gallery_hub.service.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class LocalFileStorageService implements FileStorageService {
 
@@ -32,10 +34,12 @@ public class LocalFileStorageService implements FileStorageService {
 
         try (FileOutputStream out = new FileOutputStream(targetFile)) {
             out.write(file.getBytes());
+            log.info("File successfully saved to {}", targetFile.getAbsolutePath());
         } catch (Exception exception) {
+            log.error("Failed to save file: {}", exception.getMessage(), exception);
             throw new RuntimeException(exception);
         }
-
+        log.info("File URL: {}", hostUrl + "/" + uniqueFileName);
         return hostUrl + uniqueFileName;
     }
 
