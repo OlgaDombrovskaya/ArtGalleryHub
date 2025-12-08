@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,7 +67,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByArtworkId(artworkId);
 
         return reviews.stream()
-                .map(review -> reviewMapper.toReviewResponse(review))
+                .map(reviewMapper::toReviewResponse)
                 .toList();
     }
 }

@@ -2,7 +2,7 @@ package com.art_gallery_hub.controller;
 
 import com.art_gallery_hub.dto.artwork.ArtworkPublicDetailsResponse;
 import com.art_gallery_hub.dto.artwork.ArtworkPublicSummaryResponse;
-import com.art_gallery_hub.dto.exhibition.ExhibitionSummaryResponse;
+import com.art_gallery_hub.dto.exhibition.ExhibitionPublicSummaryResponse;
 import com.art_gallery_hub.service.ArtworkService;
 import com.art_gallery_hub.service.ExhibitionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,7 +46,7 @@ public class PublicController {
 
     // GET /api/public/exhibitions – current and planned exhibitions (status = OPEN or PLANNED)
     @GetMapping("/exhibitions")
-    public List<ExhibitionSummaryResponse> getOpenOrPlannedExhibitions() {
+    public List<ExhibitionPublicSummaryResponse> getOpenOrPlannedExhibitions() {
         return exhibitionService.getOpenOrPlannedExhibitions();
     }
 }
