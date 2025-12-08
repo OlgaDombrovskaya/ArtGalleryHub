@@ -34,7 +34,7 @@ class PublicControllerIT {
 
     @Test
     @DisplayName("GET /api/public/artworks — возвращает список публичных работ, статус OK")
-    @Sql(scripts = {"classpath:sql/clear.sql",   "classpath:sql/seed_users.sql", "classpath:sql/seed_public_artworks.sql"})
+    @Sql(scripts = {"classpath:sql/clear.sql", "classpath:sql/seed_public_artworks.sql"})
     void shouldReturnPublicArtworks() {
 
         ResponseEntity<Artwork[]> response =
