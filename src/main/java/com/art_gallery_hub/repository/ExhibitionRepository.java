@@ -11,7 +11,6 @@ public interface ExhibitionRepository extends JpaRepository<Exhibition, Long> {
 
     List<Exhibition> findByStatusIn(Collection<ExhibitionStatus> statuses);
 
-    // Выставки, за которые отвечает куратор
-//    List<Exhibition> findByCurator_Id(Long curatorId);
+    List<Exhibition> findByCuratorId(Long curatorId);
 //    List<Exhibition> findByExhibitionStatus(ExhibitionStatus status);
 }

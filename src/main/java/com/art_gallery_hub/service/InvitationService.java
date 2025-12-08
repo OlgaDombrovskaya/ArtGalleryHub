@@ -55,7 +55,7 @@ public class InvitationService {
         List<Invitation> invitations = invitationRepository.findByArtistId(artistProfile.getId());
 
         return invitations.stream()
-                .map(invitationMapper::toInvitationResponse)
+                .map(invitationMapper::toInvitationArtistResponse)
                 .toList();
     }
 
@@ -72,7 +72,7 @@ public class InvitationService {
 
         Invitation acceptedInvitation = invitationRepository.save(invitation);
 
-        return invitationMapper.toInvitationResponse(acceptedInvitation);
+        return invitationMapper.toInvitationArtistResponse(acceptedInvitation);
     }
 
     @Transactional
@@ -88,7 +88,7 @@ public class InvitationService {
 
         Invitation declinedInvitation = invitationRepository.save(invitation);
 
-        return invitationMapper.toInvitationResponse(declinedInvitation);
+        return invitationMapper.toInvitationArtistResponse(declinedInvitation);
     }
 
 }
