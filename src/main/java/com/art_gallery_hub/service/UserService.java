@@ -7,8 +7,10 @@ import com.art_gallery_hub.dto.user.UserRegistrationResponse;
 import com.art_gallery_hub.dto.user.UserRoleUpdateRequest;
 import com.art_gallery_hub.enums.RoleStatus;
 import com.art_gallery_hub.mapper.UserMapper;
+import com.art_gallery_hub.model.ArtistProfile;
 import com.art_gallery_hub.model.Role;
 import com.art_gallery_hub.model.User;
+import com.art_gallery_hub.repository.ArtistProfileRepository;
 import com.art_gallery_hub.repository.RoleRepository;
 import com.art_gallery_hub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ArtistProfileRepository artistProfileRepository;
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
@@ -90,6 +93,19 @@ public class UserService {
                         encodedPassword,
                         roles
                 ));
+
+        if (roleName == RoleStatus.ROLE_ARTIST) {
+            log.info("Creating ArtistProfile for new user: {}", newUser.getUsername());
+
+            ArtistProfile newProfile = new ArtistProfile();
+            newProfile.setUser(newUser);
+
+            newProfile.setDisplayName(newUser.getUsername());
+            newProfile.setBio("Artist profile created automatically. Please update your bio and website.");
+
+            artistProfileRepository.save(newProfile);
+            log.info("ArtistProfile created successfully for user: {}", newUser.getUsername());
+        }
 
         return userMapper.toUserRegistrationResponse(newUser);
     }
