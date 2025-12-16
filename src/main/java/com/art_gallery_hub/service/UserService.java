@@ -52,6 +52,19 @@ public class UserService {
         }
     }
 
+    private void validateEmailExistence(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "User already exists with email: " + email);
+        }
+    }
+
+    private void validateNewUser(String username, String email) {
+        validateUserExistence(username);
+        validateEmailExistence(email);
+    }
+
     private Role findRoleOrThrow(RoleStatus roleName) {
         return roleRepository.findByName(roleName)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -79,7 +92,7 @@ public class UserService {
             UserRegistrationRequest request,
             RoleStatus roleName
     ) {
-        validateUserExistence(request.username());
+        validateNewUser(request.username(), request.email());
 
         Role role = findRoleOrThrow(roleName);
         Set<Role> roles = Set.of(role);
@@ -124,7 +137,7 @@ public class UserService {
     public UserRegistrationResponse createAdminUser(
             UserAdminCreationRequest request
     ) {
-        validateUserExistence(request.username());
+        validateNewUser(request.username(), request.email());
 
         Set<Role> roles = findRolesOrThrow(request.roleNames());
 

@@ -74,6 +74,19 @@ public class ExhibitionService {
                         "Exhibition not found with ID: " + id));
     }
 
+    private void checkIfInvitationExists(Long exhibitionId, Long artistProfileId) {
+        boolean alreadyExists = invitationRepository.existsByExhibitionIdAndArtistId(
+                exhibitionId,
+                artistProfileId
+        );
+        if (alreadyExists) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Invitation already exists for this artist (with ID " + artistProfileId
+                            + ") and exhibition (with ID " + exhibitionId + ")");
+        }
+    }
+
     private List<ArtworkPublicSummaryResponse> getArtworksAsArtworkPublicSummaryResponse(Exhibition exhibition) {
         return exhibition.getArtworks()
                 .stream()
@@ -219,6 +232,8 @@ public class ExhibitionService {
     ) {
         Exhibition exhibition = findExhibitionOrThrow(exhibitionId);
         ArtistProfile artist = findProfileOrThrow(artistId);
+
+        checkIfInvitationExists(exhibitionId, artistId);
 
         Invitation invitation = new Invitation();
         invitation.setExhibition(exhibition);
