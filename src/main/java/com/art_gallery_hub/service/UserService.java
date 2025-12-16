@@ -7,8 +7,10 @@ import com.art_gallery_hub.dto.user.UserRegistrationResponse;
 import com.art_gallery_hub.dto.user.UserRoleUpdateRequest;
 import com.art_gallery_hub.enums.RoleStatus;
 import com.art_gallery_hub.mapper.UserMapper;
+import com.art_gallery_hub.model.ArtistProfile;
 import com.art_gallery_hub.model.Role;
 import com.art_gallery_hub.model.User;
+import com.art_gallery_hub.repository.ArtistProfileRepository;
 import com.art_gallery_hub.repository.RoleRepository;
 import com.art_gallery_hub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ArtistProfileRepository artistProfileRepository;
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
@@ -47,6 +50,19 @@ public class UserService {
                     HttpStatus.CONFLICT,
                     "User already exists with name: " + username);
         }
+    }
+
+    private void validateEmailExistence(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "User already exists with email: " + email);
+        }
+    }
+
+    private void validateNewUser(String username, String email) {
+        validateUserExistence(username);
+        validateEmailExistence(email);
     }
 
     private Role findRoleOrThrow(RoleStatus roleName) {
@@ -76,7 +92,7 @@ public class UserService {
             UserRegistrationRequest request,
             RoleStatus roleName
     ) {
-        validateUserExistence(request.username());
+        validateNewUser(request.username(), request.email());
 
         Role role = findRoleOrThrow(roleName);
         Set<Role> roles = Set.of(role);
@@ -90,6 +106,19 @@ public class UserService {
                         encodedPassword,
                         roles
                 ));
+
+        if (roleName == RoleStatus.ROLE_ARTIST) {
+            log.info("Creating ArtistProfile for new user: {}", newUser.getUsername());
+
+            ArtistProfile newProfile = new ArtistProfile();
+            newProfile.setUser(newUser);
+
+            newProfile.setDisplayName(newUser.getUsername());
+            newProfile.setBio("Artist profile created automatically. Please update your bio and website.");
+
+            artistProfileRepository.save(newProfile);
+            log.info("ArtistProfile created successfully for user: {}", newUser.getUsername());
+        }
 
         return userMapper.toUserRegistrationResponse(newUser);
     }
@@ -108,7 +137,7 @@ public class UserService {
     public UserRegistrationResponse createAdminUser(
             UserAdminCreationRequest request
     ) {
-        validateUserExistence(request.username());
+        validateNewUser(request.username(), request.email());
 
         Set<Role> roles = findRolesOrThrow(request.roleNames());
 
