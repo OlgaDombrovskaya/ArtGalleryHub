@@ -53,8 +53,8 @@ public class SecurityConfig {
                         "/error"
                         ).permitAll()
                 .requestMatchers("/api/artist/**").hasRole("ARTIST")
-                .requestMatchers("/api/visitor/**").hasRole("VISITOR")
-                .requestMatchers("/api/curator/**").hasRole("CURATOR")
+                .requestMatchers("/api/visitor/**").hasAnyRole("VISITOR", "ADMIN")
+                .requestMatchers("/api/curator/**").hasAnyRole("CURATOR", "ADMIN")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
