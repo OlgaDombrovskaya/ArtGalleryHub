@@ -12,6 +12,7 @@ import com.art_gallery_hub.service.InvitationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,7 +92,7 @@ public class ArtistController {
     )
     @PutMapping("/profile")
     public ResponseEntity<ArtistProfileResponse> updateMyProfile(
-            @RequestBody ArtistProfileUpdateRequest artistProfileUpdateRequest,
+            @Valid @RequestBody ArtistProfileUpdateRequest artistProfileUpdateRequest,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         ArtistProfileResponse response = artistProfileService.updateArtistProfile(
@@ -124,7 +125,7 @@ public class ArtistController {
     )
     @PostMapping("/artworks")
     public ResponseEntity<ArtworkArtistResponse> createArtwork(
-            @RequestPart("artwork") ArtworkCreateRequest request,
+            @Valid @RequestPart("artwork") ArtworkCreateRequest request,
             @RequestPart("image") MultipartFile imageFile,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
@@ -185,7 +186,7 @@ public class ArtistController {
     @PutMapping("/artworks/{id}")
     public ResponseEntity<ArtworkArtistResponse> updateMyArtwork(
             @PathVariable Long id,
-            @RequestBody ArtworkUpdateRequest request
+            @Valid @RequestBody ArtworkUpdateRequest request
     ) {
         ArtworkArtistResponse response = artworkService.updateArtwork(id, request);
 

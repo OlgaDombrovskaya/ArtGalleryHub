@@ -7,6 +7,7 @@ import com.art_gallery_hub.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class AuthController {
     )
     @PostMapping("/register-artist")
     public ResponseEntity<UserRegistrationResponse> registerArtist(
-            @RequestBody UserRegistrationRequest userRegistrationRequest) {
+            @Valid @RequestBody UserRegistrationRequest userRegistrationRequest) {
         UserRegistrationResponse response =
                 userService.createUser(userRegistrationRequest, RoleStatus.ROLE_ARTIST);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -73,7 +74,7 @@ public class AuthController {
     )
     @PostMapping("/register-visitor")
     public ResponseEntity<UserRegistrationResponse> registerVisitor(
-            @RequestBody UserRegistrationRequest userRegistrationRequest) {
+            @Valid @RequestBody UserRegistrationRequest userRegistrationRequest) {
         UserRegistrationResponse response =
                 userService.createUser(userRegistrationRequest, RoleStatus.ROLE_VISITOR);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
