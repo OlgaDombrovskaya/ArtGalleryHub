@@ -1,6 +1,7 @@
 package com.art_gallery_hub.model;
 
 import com.art_gallery_hub.enums.Style;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,13 +11,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "artworks")
@@ -54,6 +59,15 @@ public class Artwork {
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp // Automatically sets the date at creation
     private LocalDateTime createdAt;
+
+    //---------------Inverse relationship------------------
+    @OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Review> reviews = new HashSet<>();
+
+    @ManyToMany(mappedBy = "artworks", fetch = FetchType.LAZY)
+    private Set<Exhibition> exhibitions = new HashSet<>();
+
+    //-----------------------------------------------------
 
     public Artwork(
             ArtistProfile artist,

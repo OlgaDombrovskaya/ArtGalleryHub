@@ -1,6 +1,7 @@
 package com.art_gallery_hub.model;
 
 import com.art_gallery_hub.enums.ExhibitionStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,8 +61,16 @@ public class Exhibition {
     )
     private Set<Artwork> artworks = new HashSet<>();
 
+    //---------------Inverse relationship------------------
+    @OneToMany(mappedBy = "exhibition", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Invitation> invitations = new HashSet<>();
+
+    //-----------------------------------------------------
+
     public void addArtwork(Artwork artwork) {
         this.artworks.add(artwork);
+
+        artwork.getExhibitions().add(this);
     }
 
     public Exhibition(String title, String description, LocalDate startDate, LocalDate endDate, User curator, ExhibitionStatus status) {
