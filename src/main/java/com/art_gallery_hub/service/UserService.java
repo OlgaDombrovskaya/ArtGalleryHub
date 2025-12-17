@@ -112,9 +112,10 @@ public class UserService {
 
             ArtistProfile newProfile = new ArtistProfile();
             newProfile.setUser(newUser);
-
             newProfile.setDisplayName(newUser.getUsername());
             newProfile.setBio("Artist profile created automatically. Please update your bio and website.");
+
+            newUser.setArtistProfile(newProfile);
 
             artistProfileRepository.save(newProfile);
             log.info("ArtistProfile created successfully for user: {}", newUser.getUsername());
