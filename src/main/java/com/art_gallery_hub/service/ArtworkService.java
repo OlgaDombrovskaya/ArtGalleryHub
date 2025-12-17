@@ -107,6 +107,7 @@ public class ArtworkService {
                 request,
                 imagePath
         );
+        artistProfile.getArtworks().add(newArtwork);
 
         Artwork savedArtwork = artworkRepository.save(newArtwork);
 
@@ -146,6 +147,11 @@ public class ArtworkService {
     @Transactional
     public void deleteArtwork(Long artworkId) {
         Artwork artwork = findArtworkOrThrow(artworkId);
+        ArtistProfile artistProfile = artwork.getArtist();
+
+        if (artistProfile.getArtworks() != null && artistProfile.getArtworks().contains(artwork)) {
+            artistProfile.getArtworks().remove(artwork);
+        }
 
         artworkRepository.delete(artwork);
     }

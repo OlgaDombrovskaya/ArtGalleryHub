@@ -135,6 +135,8 @@ public class ExhibitionService {
                 curator,
                 ExhibitionStatus.PLANNED
         );
+        curator.getCuratedExhibitions().add(exhibition);
+
         List<ArtworkPublicSummaryResponse> artworks = new ArrayList<>();
         List<InvitationCuratorResponse> invitations = new ArrayList<>();
 
@@ -239,6 +241,9 @@ public class ExhibitionService {
         invitation.setExhibition(exhibition);
         invitation.setArtist(artist);
         invitation.setStatus(InvitationStatus.PENDING);
+
+        artist.getInvitations().add(invitation);
+        exhibition.getInvitations().add(invitation);
 
         Invitation savedInvitation = invitationRepository.save(invitation);
         log.info("Saved invitation {}", savedInvitation.getId());

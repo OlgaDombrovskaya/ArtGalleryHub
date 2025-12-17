@@ -1,5 +1,6 @@
 package com.art_gallery_hub.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,15 +8,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "artist_profiles")
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = {"user", "artworks", "invitations"})
+@EqualsAndHashCode(exclude = {"user", "artworks", "invitations"})
 public class ArtistProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +44,11 @@ public class ArtistProfile {
 
     @Column
     private String website;
+
+    //---------------Inverse relationship------------------
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Artwork> artworks = new HashSet<>();
+
+    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Invitation> invitations = new HashSet<>();
 }

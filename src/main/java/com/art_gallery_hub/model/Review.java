@@ -9,16 +9,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reviews")
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = {"artwork", "author"})
+@EqualsAndHashCode(exclude = {"artwork", "author"})
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

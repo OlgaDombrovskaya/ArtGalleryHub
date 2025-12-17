@@ -55,6 +55,9 @@ public class ReviewService {
                 request
         );
 
+        author.getReviews().add(newReview);
+        artwork.getReviews().add(newReview);
+
         Review savedReview = reviewRepository.save(newReview);
 
         return reviewMapper.toReviewResponse(savedReview);
