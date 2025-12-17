@@ -12,6 +12,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -91,5 +92,19 @@ public class User {
             String user,
             String artistPassword,
             String roleArtist) {
+    }
+
+    //-----------------------------------------------------
+    @PreRemove
+    private void preRemove() {
+        if (artistProfile != null) {
+            for (Artwork artwork : artistProfile.getArtworks()) {
+                // Разрываем связи Many-to-Many перед удалением
+                for (Exhibition exhibition : new HashSet<>(artwork.getExhibitions())) {
+                    exhibition.getArtworks().remove(artwork);
+                }
+                artwork.getExhibitions().clear();
+            }
+        }
     }
 }

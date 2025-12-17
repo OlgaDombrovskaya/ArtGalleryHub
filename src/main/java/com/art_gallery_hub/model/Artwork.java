@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -89,5 +90,14 @@ public class Artwork {
         this.year = year;
         this.style = style;
         this.imagePath = imagePath;
+    }
+
+    //-----------------------------------------------------
+    @PreRemove
+    private void preRemove() {
+        for (Exhibition exhibition : new HashSet<>(this.exhibitions)) {
+            exhibition.getArtworks().remove(this);
+        }
+        this.exhibitions.clear();
     }
 }

@@ -15,6 +15,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -86,5 +87,11 @@ public class Exhibition {
         this.endDate = endDate;
         this.curator = curator;
         this.status = status;
+    }
+
+    //-----------------------------------------------------
+    @PreRemove
+    private void preRemove() {
+        this.artworks.clear(); // Просто очищаем связь в промежуточной таблице
     }
 }
