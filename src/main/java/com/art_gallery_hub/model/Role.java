@@ -11,16 +11,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = {"users"})
+@EqualsAndHashCode(exclude = {"users"})
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

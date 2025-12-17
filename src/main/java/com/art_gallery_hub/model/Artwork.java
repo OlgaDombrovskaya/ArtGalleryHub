@@ -15,8 +15,11 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -25,8 +28,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "artworks")
-@Data
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = {"artist", "reviews", "exhibitions"})
+@EqualsAndHashCode(exclude = {"artist", "reviews", "exhibitions"})
 public class Artwork {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

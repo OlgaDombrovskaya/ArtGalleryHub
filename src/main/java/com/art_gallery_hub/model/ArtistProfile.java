@@ -23,6 +23,10 @@ import java.util.Set;
 @Entity
 @Table(name = "artist_profiles")
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString(exclude = {"user", "artworks", "invitations"})
+@EqualsAndHashCode(exclude = {"user", "artworks", "invitations"})
 public class ArtistProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
